@@ -5,28 +5,101 @@
 
 = Architecture 
 
-Introduction for the architecture of this solution pattern.
+== Common Challenges addressed
 
-== Common Challenges 
+In modern application architectures based on containers and Kubernetes, developers typically aim to focus on delivering the core business logic of the services they build. However, for these services to comply with organizational requirements such as security, monitoring, high-availability networking, and other operational needs, significant additional overhead is required. These operational concerns often involve tasks unrelated to the core function of the service, such as enforcing security policies, managing traffic flows, enabling service-to-service communication, and ensuring observability.
+
+This leads to a situation where a microservice must not only handle its business logic but also embed capabilities like traffic management, resilience, and telemetry—all of which add complexity and dilute the agility that microservices architectures are meant to provide.
+
+Now imagine having to custom-build and manage this operational overhead for every single microservice in an application, especially when these services are written in various programming languages and frameworks. The lack of standardization across the stack results in:
+
+- **Inconsistent Security Policies**: Different teams may implement varying levels of security depending on their tools and knowledge, leading to vulnerabilities.
+- **Limited Observability**: Without a unified approach to logging, metrics, and tracing, troubleshooting and performance optimization become tedious and time-consuming.
+- **Inefficient Traffic Management**: Developers may struggle to implement traffic control mechanisms like retries, load balancing, or circuit breaking without a standardized solution.
+- **Decreased Developer Productivity**: Engineers spend more time on operational concerns than on delivering business value, reducing overall velocity.
+- **Loss of Agility in Microservices**: The promised agility of microservices gets undermined by the fragmented, ad-hoc implementation of cross-cutting concerns.
+
+**How OpenShift Service Mesh Solves These Challenges**
+
+OpenShift Service Mesh addresses these challenges by providing a platform-native, unified solution that abstracts away the operational complexities of microservices architectures. It allows developers to focus solely on the business logic of their services while enabling platform teams to:
+
+- **Enforce Consistent Security Policies**: Mutual TLS (mTLS) encryption and fine-grained access controls are implemented out of the box, ensuring all services adhere to a uniform security baseline.
+- **Enable Seamless Observability**: Built-in tools like Jaeger, Kiali, and Prometheus provide centralized tracing, visualization, and monitoring, giving teams actionable insights across the service mesh.
+- **Streamline Traffic Management**: Intelligent traffic routing, load balancing, and support for advanced deployment strategies (e.g., canary releases) simplify managing and optimizing service-to-service communication.
+- **Enhance Reliability and Resilience**: Features like automatic retries, circuit breakers, and failover mechanisms ensure high availability even under challenging network conditions.
+- **Support Kubernetes-Native Standards**: OpenShift Service Mesh 3's support for the Kubernetes Gateway API allows for modern, scalable management of ingress and egress traffic across clusters.
 
 [#tech_stack]
-== Technology Stack
+== Technology Stack used in this Solution Pattern
 
 // Change links and text here as you see fit.
 * Red Hat supported products
 ** https://www.redhat.com/en/technologies/cloud-computing/openshift[Red Hat OpenShift]
-** Red Hat Application Foundation
-*** https://access.redhat.com/products/quarkus[Quarkus]
-*** https://www.redhat.com/en/technologies/cloud-computing/openshift/openshift-streams-for-apache-kafka[Kafka Streams]
+*** Red Hat OpenShift Container Platorm includes services to support Service Mesh
+**** https://www.redhat.com/en/blog/red-hat-openshift-service-mesh-3-now-technology-preview[OpenShift Service Mesh 3 (Tech Preivew)]
+**** https://docs.openshift.com/service-mesh/3.0.0tp1/observability/kiali/ossm-kiali-assembly.html[Kiali (provided by Red Hat)]
+**** https://docs.redhat.com/en/documentation/openshift_container_platform/4.17/html-single/red_hat_build_of_opentelemetry/index[Red Hat build of OpenTelemetry]
+**** https://docs.openshift.com/service-mesh/3.0.0tp1/observability/traces/ossm-distr-tracing-assembly.html[Tempo Operator (provided by Red Hat)]
+**** https://www.redhat.com/en/technologies/cloud-computing/openshift/observability[OpenShift Observability]
 * Other open source products:
-** https://www.postgresql.org/[PostgreSQL database]
-** https://helm.sh/[Helm]
+** https://min.io/[MinIO (for s3 storage)]
+** https://kustomize.io/[Kustomize]
+** https://gateway-api.sigs.k8s.io//[k8s Gatway API]
 
 
 [#in_depth]
 == An in-depth look at the solution's architecture
 
-Technical description including all or some of the following: architecture ir ed diagrams. In-depth details of the decisions made and solutions used. Description of each service and what it is used for. Description of any integration.
+OpenShift Service Mesh 3 is built on a modular, Kubernetes-native architecture designed to address the complexities of managing microservices communication, security, traffic management, and observability. It integrates tightly with Red Hat OpenShift, leveraging Kubernetes-native APIs and tools.
+
+**Core Components**
+
+* **Istio**
+** Purpose: Core of the service mesh, responsible for service-to-service communication, traffic management, and policy enforcement.
+** Key Features:
+*** Intelligent traffic routing (e.g., canary deployments, mirroring).
+*** Mutual TLS (mTLS) for secure communications.
+*** Resiliency features like retries, circuit breaking, and failover.
+** Deployment: Control plane components (`istiod`, `istio-cni`) run in dedicated namespaces (`istio-system`, `istio-cni`).
+
+* **Distributed Tracing (via Tempo)**
+** Purpose: Distributed tracing for monitoring and debugging service interactions.
+** Key Features:
+*** Visualize and trace request flows across services.
+*** Identify performance bottlenecks and latency issues.
+** Deployment: Deployed as part of the OpenShift Service Mesh stack in a dedicated namespace (`tracing-system`).
+
+* **Kiali**
+** Purpose: Visualization and management tool for the service mesh.
+** Key Features:
+*** Graphical representation of service communication.
+*** Real-time traffic monitoring and health metrics.
+*** Istio configuration
+*** OSSM Plugin for OpenShift Web Console 
+** Deployment: Runs in the same namespace as the control plane or a dedicated namespace (`istio-system`).
+
+* **OpenShift Observability**
+** Purpose: Metrics collection and visualization.
+** Key Features:
+*** Collect and store time-series data for service mesh metrics.
+*** Provide dashboards for performance and health monitoring.
+*** Utilizes `SystemMonitor` and `PodMonitor` CRDs to gather Service Mesh controle plane and namespace-level metrics
+
+* **Ingress/Egress Gateways**
+** Purpose: Handle external traffic entering the mesh and secure egress traffic leaving the mesh.
+** Key Features:
+*** Centralized traffic entry/exit point.
+*** Policy enforcement and telemetry collection.
+
+**Key Architectural Decisions**
+
+* **Kubernetes Gateway API Support**
+** OpenShift Service Mesh 3 incorporates the Kubernetes Gateway API to modernize ingress and egress traffic management. This provides better scalability and integration compared to legacy Service Mesh (OSSM 2.x) ingress/egress configurations.
+* **Centralized Observability**
+** By integrating Distributed Tracing, Kiali, and OpenShift Observability, OSSM provides a unified observability stack, reducing the need for separate tooling and ensuring consistent monitoring.
+* **mTLS by Default**
+** All service-to-service communications within the mesh are secured using mutual TLS, meeting enterprise-grade security requirements out of the box.
+
 
 === Using images 
 
