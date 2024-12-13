@@ -14,3 +14,10 @@ Using OpenShift Service Mesh 3 with the Kubernetes Gateway API, they configure a
 With integrated observability tools like Jaeger and Kiali, the team monitors traffic flow, latency, and error rates in real-time for v2.
 
 Once performance metrics confirm stability, they incrementally increase traffic to v2 until it handles 100% of requests, ensuring a smooth transition.
+
+This pattern aims to cover the following use cases of OpenShift Service Mesh
+
+- **Traffic Control for Continuous  Delivery**: Enable safe progressive delivery with traffic management across application versions 
+- **Application Observability**:  Out of the box application metrics, request logs and distributed traces for system observability
+
+All while encrypting service-to-service communication with default mTLS
