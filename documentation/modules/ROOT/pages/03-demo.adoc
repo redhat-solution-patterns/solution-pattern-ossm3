@@ -5,30 +5,154 @@
 
 = See the Solution in Action
 
-== Demonstration
+Before walking though the solution, let's ensure all the necessary prerequisites are in place to set up the environment.
 
-Include here content related to potential existing demos: blogs, articles, recorded videos, walkthrough guides, tutorials.
+== Prerequisites
 
-[#demo-video]
-=== Watch a demonstration
+To provision the demo you will perform the following steps - each of which is explained in detail in the next sections:
 
-In this video you can see xpto:
+* You will need an OpenShift cluster with cluster-admin privileges. This solution pattern has been tested on OpenShift 4.17
 
-video::3yULVMdqJ98[youtube, width=800, height=480]
+* Ensure you have the OpenShift CLI tool `oc` installed and the ability to run shell scripts in your local environment such as your laptop
 
-Next, you can learn how to walkthrough this demo.
+=== CLI Tools
 
-== Run the demonstration
+To check if you have the cli tools, you can open your terminal and use following command:
 
-=== Before getting started
-To run this demo, you will need xpto. Adding to that, make sure to have:
+[.console-input]
+[source,shell script]
+----
+oc version #openshift cli client
+----
 
-* ABC
-* XYZ
-* XPTO
+== Setup
 
-=== Installing the demo
-Installation guide and basic test of the demo installation if needed
+In this demo, the deployment scripts uses the OpenShift CLI to:
 
-=== Walkthrough guide
+* Install the following OpenShift Operators:
+** OpenShift Service Mesh 3 (Tech Preview)
+** Kiali 
+** OpenTelemetry
+** Tempo 
+
+* Enable Gateway API (Tech Preview)
+
+* Implement an OpenShift Service Mesh solution
+** Provision and configure OpenShift Service Mesh control plane and other Istio supporting components (CRs namespaces)
+*** Istio (istiod)
+*** Istio-CNI (pod networking)
+*** Ingress-Gateway (for Gateway API and Istio Gateway)
+*** Kiali
+*** OpenShift Service Mesh Console Plugin
+** Provision and configure a `tracing-system` via a TemoStack for distributed tracing
+*** MinIO for persisent s3 storage
+*** Tempo 
+*** OpenTelemetry CRs
+**** OpenTelemetryCollector 
+**** Telemetry
+** Monitoring Configuration
+*** Enable User Monitoring with OpenShift Observability (Prometheus)
+*** Enable SystemMonitor in `istio-system` namespace
+*** Enable PodMonitor in all istio-related namespaces as well as application namespaces
+**** `istio-system`
+**** `istio-ingress`
+**** `bookinfo` 
+**** `rest-api-with-mesh`
+*** Label all istio-releated and application namespaces with `istio-injection=enabled`
+** Sample Applications for Demo and Use-cases
+*** `bookinfo` - A sample multi-service application to demonstrate OSSM observability
+*** `rest-api-with-mesh` - A simple RestAPI application that contains a front end API that calls our back-end API that we are going to deploy via Canary deployment
+
+There is also a set of scripts we will use to test and deploy our RestAPI backend from `v1` to `v2`
+
+=== Get the deployment scripts
+* Login to your OpenShift cluster as cluster-admin (because a number of operators will need to be installed) via the OpenShift web console
+* Click on the username on the top right hand, and then click on Copy login command. This will open another tab and you will need to login again
+* Click on *Display token* link, and copy the command under *Log in with this token*. This command will look like this:
+
+[source,shell script]
+----
+oc login --token=<token> --server=<server>
+----
+
+* Clone the following git repo
+
+[.console-input]
+[source,shell script]
+----
+git clone https://github.com/bugbiteme/ossm-3-demo.git
+----
+
+=== Install Operators and enable Gateway API
+
+Ensure you are in the top-level directory of the project: `./ossm-3-demo`.
+
+Run the following script to install the above listed Operators and Gateway API and wait for it to complete
+
+[.console-input]
+[source,shell script]
+----
+sh ./install_operators.sh
+----
+
+=== Install OSSM solution and example applications 
+
+Ensure you are in the top-level directory of the project: `./ossm-3-demo`.
+
+Run the following script to implement Service Mesh and the example applications and wait for it to complete:
+
+[.console-input]
+[source,shell script]
+----
+sh ./install_ossm3_demo.sh
+----
+
+Expected final output:
+[source,shell script]
+----
+====================================================================================================
+Ingress route for bookinfo is: http://istio-ingressgateway-istio-ingress.apps.<domain>/productpage
+To test RestAPI: sh ./scripts/test-api.sh
+Kiali route is: https://kiali-istio-system.apps.<domain>
+====================================================================================================
+----
+
+
+== Walkthrough guide
 How to run through the demo
+
+=== Exploring the bookinfo application
+
+==== OpenShift Web Console View
+From the OpenShift web console, when looking at the topology of the `bookinfo` namespace, we see a number of deployments. But 
+
+==== Kiali View
+We can see the traffic flow
+
+===== Overview
+
+===== Traffic Graphic
+
+===== Workloads
+
+===== Service
+
+===== Istio Config
+
+===== Mesh
+
+===== Distributed Tracing 
+
+=== Exploring the RestAPI (`rest-api-with-mesh`)
+
+==== OpenShift Web Console View
+From the OpenShift web console, when looking at the topology of the `bookinfo` namespace, we see a number of deployments. But 
+
+==== Kiali View via The OpenShift Service Mesh Console Plugin (OpenShift Web Console)
+We can see the traffic flow
+
+===== Overview
+
+===== Traffic Graphic
+
+=== Performing a Canary Deployment (`rest-api-with-mesh`)
