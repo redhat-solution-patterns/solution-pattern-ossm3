@@ -121,29 +121,259 @@ Kiali route is: https://kiali-istio-system.apps.<domain>
 == Walkthrough guide
 How to run through the demo
 
-=== Exploring the bookinfo application
+=== Exploring the bookinfo application 
+
+In this section we will explore the example `bookinfo` application, which is based on the samepl application found link:https://istio.io/latest/docs/examples/bookinfo/[here]
+
+`bookinfo` uses  Istio Gateway rsource `gateways.networking.istio.io`, rather than Gateway API (which we will explore later)
+image::bookinfo-01.svg[width=100%]
+
+You can access the main bookinfo page using the Ingress route shown at the end of the demo install script, or run the command:
+
+----
+export INGRESSHOST=$(oc get route istio-ingressgateway -n istio-ingress -o=jsonpath='{.spec.host}')
+echo http://${INGRESSHOST}/productpage
+----
+
+And opening the link in a web browser
+
+image::bookinfo-02.png[width=50%] 
+
+`INGRESSHOST` is the URL provided by the Istio Gateway `istio-ingressgateway` which is deployed in the `istio-ingress` namespace.
+
+----
+ oc get deployment -n istio-ingress istio-ingressgateway -o yaml 
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+  name: istio-ingressgateway
+  namespace: istio-ingress
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 2
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      istio: ingressgateway
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        inject.istio.io/templates: gateway
+      creationTimestamp: null
+      labels:
+        app: istio-ingressgateway
+        istio: ingressgateway
+        sidecar.istio.io/inject: "true"
+    spec:
+      containers:
+      - image: auto
+        imagePullPolicy: Always
+        name: istio-proxy
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      terminationGracePeriodSeconds: 30
+----
+
+This deployment represents an Istio-native Gateway deployed in the `istio-ingress` namespace. It is responsible for handling ingress traffic into the service mesh.
+
+The `istio-ingressgateway` is a gateway deployment that manages external traffic into the Istio mesh, functioning as a Kubernetes Gateway or Ingress Gateway. It uses an Envoy proxy to route requests to appropriate services within the mesh.
+
+* Role in Istio:
+** This deployment serves as an entry point for external traffic into the service mesh.
+** It routes requests to internal services based on `VirtualService` and `Gateway` configurations.
+** It supports load balancing, TLS termination, and traffic routing rules.
+
+The **Gateway** resource (`bookinfo-gateway`) serves as a configuration for traffic routing rules, and it targets the ingress-gateway (`istio-ingressgateway` deployment) by matching the label `istio: ingressgateway`. The ingress-gateway deployment acts as the entry point into the Istio service mesh, applying these routing rules and forwarding traffic to services within the mesh.
+
+This separation of control plane configuration (Gateway resource) and data plane traffic handling (ingress-gateway) allows for flexibility, scalability, and Kubernetes-native traffic management.
+
+----
+oc get gateways.networking.istio.io -n bookinfo -o yaml 
+
+apiVersion: v1
+items:
+- apiVersion: networking.istio.io/v1
+  kind: Gateway
+  metadata:
+    name: bookinfo-gateway
+    namespace: bookinfo
+  spec:
+    selector:
+      istio: ingressgateway
+    servers:
+    - hosts:
+      - '*'
+      port:
+        name: http
+        number: 8080
+        protocol: HTTP
+kind: List
+----
+
+Another thing to look at is the namespace of the `bookinfo` app itself and take note of the label `istio-injection`
+----
+apiVersion: v1
+kind: Namespace
+metadata:
+...
+  labels:
+    istio-injection: enabled
+...
+----
+
+The label `istio-injection: enabled` on a Namespace is critical because it enables automatic sidecar injection for all pods deployed within that namespace. This label is a core part of Istio's architecture and is essential for integrating services into the service mesh.
+
+The label istio-injection: enabled on a Namespace is critical because it enables automatic sidecar injection for all pods deployed within that namespace. This label is a core part of Istio's architecture and is essential for integrating services into the service mesh.
+
+**Why is `istio-injection: enabled` Important?**
+
+* Automatic Sidecar Injection
+** When the `istio-injection: enabled` label is added to a namespace, the Istio sidecar injector webhook is triggered.
+** This webhook automatically injects the Envoy sidecar proxy container into each pod deployed in the namespace.
+** The Envoy proxy is responsible for:
+*** Intercepting and managing inbound and outbound traffic.
+*** Applying security features like mutual TLS (mTLS).
+*** Enabling observability tools such as tracing and metrics collection.
+*** Enforcing traffic routing rules (e.g., canary deployments, retries, circuit breakers).
+
+* Integration into the Service Mesh
+** Without the Envoy sidecar, the pods would not be able to:
+*** Participate in the service mesh.
+*** Benefit from Istio's traffic management, observability, and security capabilities.
+** The `istio-injection: enabled` label ensures that all services within the namespace are automatically onboarded into the mesh.
+
+The output of `oc get pods -n bookinfo` shows that the Bookinfo application is running in the `bookinfo` namespace with multiple services and versions. The key observation here is that each pod has 2/2 containers running, indicating that Istio sidecar injection is enabled in this namespace.
+
+----
+oc get pods -n bookinfo
+
+NAME                             READY   STATUS    RESTARTS   AGE
+details-v1-65cfcf56f9-hfl47      2/2     Running   2          26h
+kiali-traffic-generator-hv595    2/2     Running   2          26h
+productpage-v1-d5789fdfb-6gs76   2/2     Running   2          26h
+ratings-v1-7c9bd4b87f-8979h      2/2     Running   2          26h
+reviews-v1-6584ddcf65-45q2k      2/2     Running   2          26h
+reviews-v2-6f85cb9b7c-rr7kc      2/2     Running   2          26h
+reviews-v3-6f5b775685-8mfwj      2/2     Running   2          26h
+----
+
+To get more information about the containers with in a pod, use the `oc describe pod <pod name>` and look in the `Containers` section:
+
+Example:
+----
+oc describe pod productpage-v1-d5789fdfb-6gs7 -n bookinfo
+
+Name:             productpage-v1-d5789fdfb-6gs76
+Namespace:        bookinfo
+...
+Containers:
+  productpage:
+    Container ID: ...
+    ...
+  istio-proxy:
+    Container ID:...
+    ...
+...
+----
 
 ==== OpenShift Web Console View
-From the OpenShift web console, when looking at the topology of the `bookinfo` namespace, we see a number of deployments. But 
+From the OpenShift web console, when looking at the topology of the `bookinfo` namespace, we see a number of deployments. But we really cannot see how these services interact with one another.
+
+image::bookinfo-03.png[width=75%] 
 
 ==== Kiali View
-We can see the traffic flow
+We can get a better view of how our services are interacting with one another when we use the Istio observability tool Kiali.
+
+To obtain the Kiali URL, you can run the following commands:
+----
+export KIALI_HOST=$(oc get route kiali -n istio-system -o=jsonpath='{.spec.host}')
+echo https://${KIALI_HOST}
+----
+
+Open this URL in a new tab and login with your OpenShift cluster admin credentials
 
 ===== Overview
 
-===== Traffic Graphic
+When you initially log into the Kiali web console, you will be brought to the `Overview` page. This is a dashboard of all non-default projects in your cluster. 
+
+image::bookinfo-04.png[width=75%] 
+
+Here we can see some inbound traffic in this namespace. That is becuase we deployed a `kiali-traffic-generator` pod to coninuously call this application.
+
+===== Traffic Graph
+
+To get more ganularity on this triffic, click the three dot "kebab" menu on the `bookinfo` tile and select the `Graph` option
+
+image::bookinfo-05.png[width=100%]
+
+Now we can see a graphical representation of the traffic in our service mesh-enabled application. You may need to resize your screen to see the details of each `bookinfo` service.
+
+image::bookinfo-06.png[width=100%]
+
+To display more metrics on the graph, use the drop-down `Display` menu, and check some of the metrics you want to see. Feel free to experiment.
+
+Example:
+
+image::bookinfo-07.png[width=100%]  
+
+Change the graph type to `Versioned app graph` to see how traffic is being disributed between the different versions of the `reviews` service.
+
+image::bookinfo-08.png[width=100%] 
+
+This is just a sample of the observability data we can easily interpret in the Kiali graph view. We will quickly drill into some of the other Kiali menu items in the next few sections.
+
+===== Applications
+
+The Applications view allows us to drill down into each of the services that make up the `bookinfo` application, and allows us get an overview and metrics of a particular service
+
+image::bookinfo-09.png[width=100%] 
 
 ===== Workloads
 
-===== Service
+The Worklods view allows you to drill down even further into each pod workload, and view similar information around metrics, as well as envoy proxy status and logs.
+
+image::bookinfo-10.png[width=100%] 
+
+===== Services
+
+The Services view allows you to view by kubernetes Services. Note that the front end service `productpage` is also associated with a `VirtualService` and `Gateway` as indicated in the `Details` column.
+
+image::bookinfo-11.png[width=100%] 
 
 ===== Istio Config
 
+The Istio Config view allows us to view and modify the configuration of Istio specific resources. This comes in handy, as they are not as easy to find in the OpenShift web console.
+
+image::bookinfo-12.png[width=75%] 
+
 ===== Mesh
+
+The Mesh view provides a high level view of the entire service mesh: istio-system (control plane), tracing-system (distributed tracing components), Data Plane (application namespaces), and External resources, such as Prometheus monitoring.
+
+image::bookinfo-13.png[width=100%] 
 
 ===== Distributed Tracing 
 
-=== Exploring the RestAPI (`rest-api-with-mesh`)
+The Distributed Tracing option opens up a new window (Jaeger Console). Distributed Tracing is actually handled separatly from Kiali via Tempo, and is viewable with the Jaeger web console.
+
+[NOTE]
+====
+Distributed Tracing is not covered in this Solution Pattern, but feel free to explore this consol on your own. 
+====
+
+
+=== Exploring the RestAPI (`rest-api-with-mesh`) (Using Gateway API)
 
 ==== OpenShift Web Console View
 From the OpenShift web console, when looking at the topology of the `bookinfo` namespace, we see a number of deployments. But 

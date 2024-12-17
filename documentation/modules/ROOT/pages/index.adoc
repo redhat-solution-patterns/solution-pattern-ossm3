@@ -44,6 +44,7 @@ This Solution Pattern will update as supported releases become generally availab
 ====
 Solutions Patterns help you understand the art of the possible with Red Hat's portfolio, and not intended to be used as is for production environments. You are welcome use any part of this solution pattern for your own workloads.
 ====
+
 [#use-cases]
 == Use cases
 
