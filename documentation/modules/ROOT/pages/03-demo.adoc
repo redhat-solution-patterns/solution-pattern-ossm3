@@ -331,7 +331,7 @@ Change the graph type to `Versioned app graph` to see how traffic is being disri
 
 image::bookinfo-08.png[width=100%] 
 
-This is just a sample of the observability data we can easily interpret in the Kiali graph view. We will quickly drill into some of the other Kiali menu items in the next few sections.
+This is just a sample of the observability data we can easily interpret in the Kiali graph view. We will closer look into some of the other Kiali menu items in the next few sections.
 
 ===== Applications
 
@@ -341,7 +341,7 @@ image::bookinfo-09.png[width=100%]
 
 ===== Workloads
 
-The Worklods view allows you to drill down even further into each pod workload, and view similar information around metrics, as well as envoy proxy status and logs.
+The Workloads view allows you to explore even further into each pod workload, and view similar information around metrics, as well as envoy proxy status and logs.
 
 image::bookinfo-10.png[width=100%] 
 
@@ -369,20 +369,269 @@ The Distributed Tracing option opens up a new window (Jaeger Console). Distribut
 
 [NOTE]
 ====
-Distributed Tracing is not covered in this Solution Pattern, but feel free to explore this consol on your own. 
+Distributed Tracing is not covered in this Solution Pattern, but feel free to explore this console on your own. 
 ====
 
 
 === Exploring the RestAPI (`rest-api-with-mesh`) (Using Gateway API)
 
+In this section we will explore the our `hello-rest` application, which is the application we will be using to perform our canary deployment from `v1` to `v2` of our backend service
+
+This application uses the **Kuberntetes Gateway API** resource for ingress.
+image::bookinfo-01.svg[width=100%]
+
+You can access the front end of the RestAPI using the Ingress route shown at the end of the demo install script, or run the command:
+
+----
+export GATEWAY=$(oc get gateway hello-gateway -n istio-ingress -o template --template='{{(index .status.addresses 0).value}}')
+
+curl -s $GATEWAY/hello 
+curl -s $GATEWAY/hello-service 
+----
+
+`curl -s $GATEWAY/hello` returns output from the front-end service.
+`curl -s $GATEWAY/hello-service uses the front-end service to return output from the back-end service.
+
+Before we continue, be sure to run the script
+
+----
+sh scripts/generate-traffic.sh 
+----
+
+Example output:
+
+----
+❯ sh scripts/generate-traffic.sh  
+Tue Dec 17 14:23:23 PST 2024
+{
+  "response": {
+    "message": "Hello World from service-b-v1"
+  }
+}
+Tue Dec 17 14:23:25 PST 2024
+{
+  "response": {
+    "message": "Hello World from service-b-v1"
+  }
+}
+Tue Dec 17 14:23:26 PST 2024
+{
+  "response": {
+    "message": "Hello World from service-b-v1"
+  }
+}
+Tue Dec 17 14:23:27 PST 2024
+{
+  "response": {
+    "message": "Hello World from service-b-v1"
+  }
+}
+...
+----
+
+This is a loop that calls the front end RestAPI to get information from the backend RestAPI `service-b-v1` every second in order to generate traffic for testing our canary deployment of `service-b-v2`
+
+[NOTE]
+====
+Ensure you have the `jq` command line tool installed on your system in order to format the output properly
+====
+
+`GATEWAY` is the URL provided by the Gateway API `hello-gateway` gateway which is deployed in the `istio-ingress` namespace.
+
+Gateway API uses the `GatewayClass` type `istio`, so it requires OpenShift Service Mesh:
+
+GatewayClass
+
+----
+oc get gatewayclass istio -o yaml 
+
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  name: istio
+spec:
+  controllerName: istio.io/gateway-controller
+  description: The default Istio GatewayClass
+----
+
+Gateway
+
+----
+oc get gateway -n istio-ingress hello-gateway -o yaml 
+
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  labels:
+    app: hello-gateway
+    version: v1
+  name: hello-gateway
+  namespace: istio-ingress
+spec:
+  gatewayClassName: istio
+  listeners:
+  - allowedRoutes:
+      namespaces:
+        from: All
+    name: http
+    port: 80
+----
+
+As you can see, this is much cleaner than the the gateway deployment used for the `bookinfo` application.
+
+We are using the Gateway API `HTTPRoute` to associate the front-end service with the `Gateway`
+
+----
+oc get httproute web-front-end-route -n rest-api-with-mesh -o yaml
+
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: web-front-end-route
+  namespace: rest-api-with-mesh
+spec:
+  parentRefs:
+  - group: gateway.networking.k8s.io
+    kind: Gateway # <<<< Gateway to refrerence 
+    name: hello-gateway
+    namespace: istio-ingress
+  rules:
+  - backendRefs:
+    - group: ""
+      kind: Service # <<<< Service of the web-front-end pod
+      name: web-front-end
+      port: 8080
+      weight: 1
+    matches:
+    - path:
+        type: PathPrefix
+        value: /
+----
+
 ==== OpenShift Web Console View
-From the OpenShift web console, when looking at the topology of the `bookinfo` namespace, we see a number of deployments. But 
+
+From the OpenShift web console, when looking at the topology of the `rest-api-with-mesh` namespace, can see the `web-front-end` and `service-b-v1` and the newly created `service-b-v2`, but as we could see with our `curl` calls and our `generate-traffic.sh` script, we are only getting data back from `service-b-v1`.
+
+
+image::rest-01.png[width=75%] 
+
+
+----
+export GATEWAY=$(oc get gateway hello-gateway -n istio-ingress -o template --template='{{(index .status.addresses 0).value}}')
+curl -s $GATEWAY/hello-service
+----
+
+----
+{"response":{"message":"Hello World from service-b-v1"}}
+----
 
 ==== Kiali View via The OpenShift Service Mesh Console Plugin (OpenShift Web Console)
-We can see the traffic flow
 
-===== Overview
+This time, instead of using the Kiali Web Consle, we will observe our service mesh with the OpenShift Service Mesh plugin, which is included with Kiali.
 
-===== Traffic Graphic
+In the `Administrator` view in the OpenShift Web Console, on the left hand menu, scroll down and select `Service Mesh -> Traffic Graph`.
+
+
+
+With `sh scripts/generate-traffic.sh` continuing to run in a terminal, go to the `Traffic Graph` Kiali menu and select the `rest-api-with-mesh` namespace.
+
+image::rest-02.png[width=100%]   
+
+For the `Display` options, select: 
+
+- `Traffic Distribution`
+- `Idle Nodes`
+- `Traffic Animation` (optional, but helpful)
+
+image::rest-03.png[width=100%] 
+
+Now we can clearly see the flow of traffic through the Gateway to our backend service, and as we can also observe, all traffic is being routed to `v1` of service-b.
+
+image::rest-04.png[width=100%] 
+
+Keep this browser window open while `sh scripts/generate-traffic.sh` continues to run in a terminal for the next section.
+
+Also set the replay to 1 minute and refresh every 10 seconds. This will give us a view of our Kiali traffic in slight-delayed "real-time".
+
+image::canary-02.png[width=100%] 
 
 === Performing a Canary Deployment (`rest-api-with-mesh`)
+
+image::canary-01.png[width=70%] 
+
+A canary deployment is a strategy where a team releases a new version of their application to a small percentage of the production traffic. This small percentage can test the new version and provide feedback. If the new version is working well, the team can increase the percentage, until all the traffic is using the new version. 
+
+For this solution pattern, we will be using a script to automate the canary deployment. Other DevOps tools, such as Argo Rollouts and Ansible are commonly used to automate canary deployments with Service Mesh as well.
+
+In OpenShift Service Mesh, a canary deployment can be implemented using the `VirtualService` resource. A `VirtualService` allows you to define traffic routing rules for your services, enabling granular control over how requests are distributed between different versions of an application.
+
+Here’s how a canary deployment works with a `VirtualService` in OpenShift Service Mesh:
+
+* Deploy Multiple Versions of Your Application
+** Ensure the new version of your application is deployed alongside the current version.
+** For example, deploy `service-b-v1` and `service-b-v2` as separate deployments in OpenShift.
+
+* Define a `VirtualService`
+** A VirtualService is created to control how traffic is routed between `v1` and `v2` of the `service-b`` service. The traffic split is defined using weights for each version.
+
+Here’s an example of a `VirtualService` that implements a canary deployment for the `service-b`` service:
+
+----
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: service-b
+  namespace: rest-api-with-mesh
+spec:
+  hosts:
+  - service-b
+  http:
+  - route:
+    - destination:
+        host: service-b
+        port:
+          number: 8080
+        subset: v1
+      weight: 100
+    - destination:
+        host: service-b
+        port:
+          number: 8080
+        subset: v2
+      weight: 0
+----
+
+In it's current state, the `VirtualService` is has a weight of `100%` routing traffic to `v1` and `0%` to `v2`. We will use our deployment script to change these weights in small increments until traffic is weighted at `100%` to `v2`
+
+Let's kick this off now!
+
+Open a second terminal and open it side-by-side with your terminal running the `generate-traffic.sh` script. Also be sure that you can view your web console (either on the same or second screen).
+
+image::canary-03.png[width=100%] 
+
+(Above: Example screen layout)
+
+In the second terminal, run the script `canary-rollout.sh`
+
+----
+sh scripts/canary-rollout.sh
+----
+
+In this terminal you will see updated ttraffic weights between `v1` and `v2`, while in real time, output from the `traffic-generator.sh` script will start displaying responses from `service-b-v2`.
+
+The Kialy terminal will show updated progress as well, but keep in mind the data seen is 1 minute in the past, but still makes for a useful visualization.
+
+image::canary-04.png[width=100%] 
+
+image::canary-05.png[width=100%] 
+
+image::canary-06.png[width=100%] 
+
+image::canary-07.png[width=100%]  
+
+If you would like to roll traffic back to `v1`, run the command:
+
+----
+oc apply -k ./resources/application/kustomize/overlays/pod 
+----
+
