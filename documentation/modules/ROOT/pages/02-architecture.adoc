@@ -11,6 +11,8 @@ In modern application architectures based on containers and Kubernetes, develope
 
 This leads to a situation where a microservice must not only handle its business logic but also embed capabilities like traffic management, resilience, and telemetry—all of which add complexity and dilute the agility that microservices architectures are meant to provide.
 
+image::overhead-01.png[width=75%]
+
 Now imagine having to custom-build and manage this operational overhead for every single microservice in an application, especially when these services are written in various programming languages and frameworks. The lack of standardization across the stack results in:
 
 - **Inconsistent Security Policies**: Different teams may implement varying levels of security depending on their tools and knowledge, leading to vulnerabilities.
@@ -28,6 +30,18 @@ OpenShift Service Mesh addresses these challenges by providing a platform-native
 - **Streamline Traffic Management**: Intelligent traffic routing, load balancing, and support for advanced deployment strategies (e.g., canary releases) simplify managing and optimizing service-to-service communication.
 - **Enhance Reliability and Resilience**: Features like automatic retries, circuit breakers, and failover mechanisms ensure high availability even under challenging network conditions.
 - **Support Kubernetes-Native Standards**: OpenShift Service Mesh 3's support for the Kubernetes Gateway API allows for modern, scalable management of ingress and egress traffic across clusters.
+
+With few or no service code changes.
+
+OpenShift Service Mesh uses a proxy to intercept all your network traffic, allowing a broad set of application-aware features based on configuration you set.
+
+image::ossm-01.png[width=50%]
+
+The control plane takes your desired configuration, and its view of the services, and dynamically programs the proxy servers, updating them as the rules or the environment changes.
+
+image::ossm-02.png[width=75%]
+
+The data plane is the communication between services. 
 
 [#tech_stack]
 == Technology Stack used in this Solution Pattern
