@@ -36,11 +36,11 @@ OpenShift Service Mesh addresses these challenges by providing a platform-native
 
 With few or no service code changes.
 
-OpenShift Service Mesh uses a proxy to intercept all your network traffic, allowing a broad set of application-aware features based on configuration you set.
+OpenShift Service Mesh uses a proxy container (Envoy) to manage all network traffic for your applications. This proxy allows you to enable powerful features, like traffic control, security, and monitoring, based on the settings you define.
 
 image::ossm-01.png[width=50%]
 
-The control plane takes your desired configuration, and its view of the services, and dynamically programs the proxy servers, updating them as the rules or the environment changes.
+The control plane takes your desired configuration, and its view of the services, and dynamically programs the proxy, updating them as the rules or the environment changes.
 
 image::ossm-02.png[width=75%]
 
@@ -83,7 +83,7 @@ OpenShift Service Mesh 3, leveraging the Kubernetes Gateway API, provides a Kube
 image::flow-diagram-01.png[width=100%]
 
 === **Traffic Splitting with Virtual Services**:
-** The team defines a Virtual Service within OpenShift Service Mesh to split traffic dynamically between `v1` and `v2` of the back-end-service. Initially, 90% of traffic is routed to `v1`, while 10% is routed to `v2`.
+** The application or operations team defines a Virtual Service within OpenShift Service Mesh to split traffic dynamically between `v1` and `v2` of the back-end-service. Initially, 90% of traffic is routed to `v1`, while 10% is routed to `v2`.
 ** This setup ensures that most users experience the stable `v1` while `v2` is tested under real-world conditions with a small subset of traffic.
 
 === **Real-Time Observability**:
