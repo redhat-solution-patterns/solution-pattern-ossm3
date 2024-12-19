@@ -6,6 +6,8 @@
 
 = Developer Resources
 
-* Add link to the git repo of the code
-* Add links to whitepapers, ebooks, learning paths, product pages
-
+* link:https://github.com/bugbiteme/ossm-3-demo[Link to the git repo of the OSSM 3 demo]
+* link:https://www.redhat.com/en/blog/red-hat-openshift-service-mesh-3-now-technology-preview[Red Hat OpenShift Service Mesh 3: Now technology preview (blog post)]
+* link:https://docs.openshift.com/service-mesh/3.0.0tp1/about/ossm-about-openshift-service-mesh.html[Offical OpenShift Service Mesh documentation]
+* link:https://www.redhat.com/en/resources/getting-started-with-openshift-service-mesh-ebook[Getting started with Red Hat OpenShift Service Mesh (e-book)]
+* link:https://www.redhat.com/en/services/training/building-resilient-microservices-istio-and-red-hat-openshift-service-mesh-exam-do329[Red Hat OpenShift Service Mesh course and certification]

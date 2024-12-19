@@ -9,11 +9,11 @@
 ** xref:02-architecture.adoc#more_tech[{module}.{counter:submodule2}. More about the technology stack]
 
 * xref:03-demo.adoc[{counter:module}. See the Solution in Action]
-// ** xref:03-demo.adoc#_demonstration[{module}.{counter:submodule3}. Prerequisites]
-// ** xref:03-demo.adoc#_run_the_demonstration[{module}.{counter:submodule2}. Run this demonstration]
-// ** xref:03-demo.adoc#_before_getting_started[{module}.{counter:submodule2}. Pre-requisites]
-// ** xref:03-demo.adoc#_installing_the_demo[{module}.{counter:submodule2}. Installing the demo]
-// ** xref:03-demo.adoc#_walkthrough_guide[{module}.{counter:submodule2}. Walkthrough guide]
+** xref:03-demo.adoc#_demonstration[{module}.{counter:submodule3}. Prerequisites]
+** xref:03-demo.adoc#_run_the_demonstration[{module}.{counter:submodule3}. Run this demonstration]
+** xref:03-demo.adoc#_before_getting_started[{module}.{counter:submodule3}. Pre-requisites]
+** xref:03-demo.adoc#_installing_the_demo[{module}.{counter:submodule3}. Installing the demo]
+** xref:03-demo.adoc#_walkthrough_guide[{module}.{counter:submodule3}. Walkthrough guide]
 
 // * xref:04-workshop.adoc[{counter:module}. Workshop]
 // ** xref:04-workshop.adoc#_installing_the_workshop_environment[{module}.{counter:submodule4}. Installing the workshop environment]
