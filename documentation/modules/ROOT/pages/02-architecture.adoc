@@ -26,25 +26,25 @@ Now imagine having to custom-build and manage this operational overhead for ever
 image::ossm-use-cases.png[width=100%]
 
 
-OpenShift Service Mesh addresses these challenges by providing a platform-native, unified solution that abstracts away the operational complexities of microservices architectures. It allows developers to focus solely on the business logic of their services while enabling platform teams to:
+**OpenShift Service Mesh** addresses these challenges by providing a platform-native, unified solution that abstracts away the operational complexities of microservices architectures. It allows developers to focus solely on the business logic of their services while enabling platform teams to:
 
 - **Enforce Consistent Security Policies**: Mutual TLS (mTLS) encryption and fine-grained access controls are implemented out of the box, ensuring all services adhere to a uniform security baseline.
-- **Enable Seamless Observability**: Built-in tools like Jaeger, Kiali, and Prometheus provide centralized tracing, visualization, and monitoring, giving teams actionable insights across the service mesh.
+- **Enable Seamless Observability**: Built-in platform tools like **Distributed Tracing**, **Kiali**, and **Prometheus** provide centralized tracing, visualization, and monitoring, giving teams actionable insights across the service mesh.
 - **Streamline Traffic Management**: Intelligent traffic routing, load balancing, and support for advanced deployment strategies (e.g., canary releases) simplify managing and optimizing service-to-service communication.
 - **Enhance Reliability and Resilience**: Features like automatic retries, circuit breakers, and failover mechanisms ensure high availability even under challenging network conditions.
 - **Support Kubernetes-Native Standards**: OpenShift Service Mesh 3's support for the Kubernetes Gateway API allows for modern, scalable management of ingress and egress traffic across clusters.
 
 With few or no service code changes.
 
-OpenShift Service Mesh uses a proxy container (Envoy) to manage all network traffic for your applications. This proxy allows you to enable powerful features, like traffic control, security, and monitoring, based on the settings you define.
+OpenShift Service Mesh uses a proxy container (Envoy) that is injected into a pod to intercept and manage all network traffic for your applications. This proxy allows you to enable powerful features, like traffic control, security, and monitoring, based on the settings you define in the Service Mesh control plane in a way that is decoupled from the application code.
 
 image::ossm-01.png[width=50%]
 
-The control plane takes your desired configuration, and its view of the services, and dynamically programs the proxy, updating them as the rules or the environment changes.
+The control plane takes your desired configuration, and its view of the services, and dynamically manages the proxy mesh, updating them as the rules or the environment changes.
 
 image::ossm-02.png[width=75%]
 
-The data plane is the communication between services. 
+The data plane is the communication between services within the mesh itself. 
 
 [#tech_stack]
 == Technology Stack used in this Solution Pattern
@@ -78,7 +78,7 @@ a|image::ossm-logo-04.png[width=100, height=100]
 [#in_depth]
 == An in-depth look at the solution's architecture 
 
-OpenShift Service Mesh 3, leveraging the Kubernetes Gateway API, provides a Kubernetes-native and efficient approach to canary deployments. Here’s how it addresses the challenges:
+OpenShift Service Mesh 3, leveraging the Kubernetes Gateway API, provides a Kubernetes-native and efficient approach to managing cluster ingress and canary deployments. Here’s how it addresses the challenges:
 
 image::flow-diagram-01.png[width=100%]
 
@@ -124,10 +124,11 @@ OpenShift Service Mesh 3 is built on a modular, Kubernetes-native architecture d
 *** Policy enforcement and telemetry collection.
 ** Can express capabilities like HTTP header manipulation, traffic weighting & mirroring, TCP/UDP routing
 ** May be attached to one or more Route references which serve to direct traffic for a subset of traffic to a specific service
+** Uses Istio for ingress traffic management.
 
 * **HTTPRoute** (Gateway API)
-** Enables advanced routing capabilities for Ingress.
-** Specifies routing behavior of HTTP requests from a Gateway listener to an API object, i.e. Service.
+** Enables advanced routing capabilities for service ingress.
+** Specifies routing behavior of HTTP requests from a Gateway listener to an kubernetes `Service` resource associated with a pod.
 ** Each Route includes a way to reference the parent resources it wants to attach to.
 
 * **Distributed Tracing (via Tempo)**
@@ -150,7 +151,7 @@ OpenShift Service Mesh 3 is built on a modular, Kubernetes-native architecture d
 ** Purpose: Metrics collection and visualization.
 ** Key Features:
 *** Collect and store time-series data for service mesh metrics.
-*** Provide dashboards for performance and health monitoring.
+*** Provide dashboards in the OpenShift Web console for performance and health monitoring.
 *** Utilizes `SystemMonitor` and `PodMonitor` CRDs to gather Service Mesh controle plane and namespace-level metrics
 
 * **Ingress/Egress Gateways**

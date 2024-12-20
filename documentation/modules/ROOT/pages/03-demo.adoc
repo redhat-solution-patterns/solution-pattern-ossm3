@@ -9,7 +9,7 @@ Before walking through the solution, ensure all necessary prerequisites are in p
 [#before_getting_started]
 == Prerequisites 
 
-To provision the demo, you will perform the following steps—each explained in detail in the next sections:
+To provision the demo, you will perform the following steps, each explained in detail in the next sections:
 
 * You will need an OpenShift cluster with cluster-admin privileges. This solution pattern has been tested on OpenShift 4.17.
 * Ensure you have the OpenShift CLI tool `oc` installed and the ability to run shell scripts in your local environment, such as your laptop.
@@ -192,8 +192,6 @@ metadata:
 
 The label `istio-injection: enabled` on a Namespace is critical because it enables automatic sidecar injection for all pods deployed within that namespace. This label is a core part of Istio's architecture and is essential for integrating services into the service mesh.
 
-The label istio-injection: enabled on a Namespace is critical because it enables automatic sidecar injection for all pods deployed within that namespace. This label is a core part of Istio's architecture and is essential for integrating services into the service mesh.
-
 **Why is `istio-injection: enabled` Important?**
 
 * Automatic Sidecar Injection
@@ -213,6 +211,7 @@ The label istio-injection: enabled on a Namespace is critical because it enables
 
 The output of `oc get pods -n bookinfo` shows that the Bookinfo application is running in the `bookinfo` namespace with multiple services and versions. The key observation here is that each pod has 2/2 containers running, indicating that Istio sidecar injection is enabled in this namespace.
 
+[source,bash]
 ----
 oc get pods -n bookinfo
 
@@ -254,6 +253,8 @@ image::bookinfo-03.png[width=75%]
 We can get a better view of how our services are interacting with one another when we use the Istio observability tool Kiali.
 
 To obtain the Kiali URL, you can run the following commands:
+
+[source,bash]
 ----
 export KIALI_HOST=$(oc get route kiali -n istio-system -o=jsonpath='{.spec.host}')
 echo https://${KIALI_HOST}
@@ -328,6 +329,8 @@ The Distributed Tracing option opens up a new window (Jaeger Console). Distribut
 [NOTE]
 ====
 Distributed Tracing is not covered in this Solution Pattern, but feel free to explore this console on your own. 
+
+If the Distributed Tracing page does not disply properly, ensure the URL is using `http` rather than `https`
 ====
 
 [#walkthrough_guide]
@@ -499,6 +502,7 @@ For the `Display` options, select:
 
 - `Traffic Distribution`
 - `Idle Nodes`
+- `Security`
 - `Traffic Animation` (optional, but helpful)
 
 image::rest-03.png[width=100%] 

@@ -2,6 +2,8 @@
 
 **Canary Deployment with Traffic Splitting**
 
+image::canary-01.png[width=75%]
+
 **Objective**: Safely roll out a new version of a microservice while monitoring its performance.
 
 A retail company has an application running on OpenShift that handles online orders. The development team wants to deploy a new version (`v2`) of their `hello-service` RestAPI without disrupting users of the current version (`v1`).
@@ -11,7 +13,7 @@ A retail company has an application running on OpenShift that handles online ord
 
 Using OpenShift Service Mesh 3 with the Kubernetes Gateway API, they configure a traffic-splitting policy to direct 90% of traffic to `v1` and 10% to `v2`.
 
-With integrated observability tools like **Jaeger** and **Kiali**, the team monitors traffic flow, latency, and error rates in real-time for v2.
+With integrated observability tools like **Jaeger** and **Kiali**, the team monitors traffic flow, latency, and error rates in real-time for `v2`.
 
 Once performance metrics confirm stability, they incrementally increase traffic to `v2` until it handles 100% of requests, ensuring a smooth transition.
 

@@ -4,12 +4,16 @@
 :sectlinks:
 :doctype: book
 
+image::mesh-cover-page.png[width=75%] 
 Red Hat OpenShift Service Mesh adds a transparent layer on existing distributed applications without requiring any changes to the application code. The mesh introduces an easy way to create a network of deployed services that provides discovery, load balancing, service-to-service authentication, failure recovery, metrics, and monitoring. A service mesh also provides more complex operational functionality, including A/B testing, canary releases, access control, and end-to-end authentication.
 
-Microservice architectures split the work of enterprise applications into modular services, which can make scaling and maintenance easier. However, as an enterprise application built on a microservice architecture grows in size and complexity, it becomes difficult to understand and manage. Service Mesh can address those architecture problems by capturing or intercepting traffic between services and can modify, redirect, or create new requests to other services.
+Microservice architectures split the work of enterprise applications into modular services (deployed as pods in Kuberntetes), which can make scaling and maintenance easier. However, as an enterprise application built on a microservice architecture grows in size and complexity, it can potentially become difficult to understand and manage. Service Mesh can address those architecture problems by capturing or intercepting traffic between services and can modify, redirect, or create new requests to other services in a way that is independant from business logic.
 
+image::mesh-diagram-01.png[width=100%]
 
 **Included with OpenShift Container Platform Subscription**
+
+image::mesh-diagram-02.png[width=75%]
 
 A key benefit of OpenShift Service Mesh is that it, along with most of its critical dependencies (e.g., Istio, Jaeger, Kiali, Prometheus), is included and fully supported with the OpenShift Container Platform subscription. This integration ensures:
 
@@ -26,7 +30,7 @@ This solution brief demonstrates how OpenShift Service Mesh 3 empowers platform 
 ++++
 [IMPORTANT]
 ====
-**OpenShift Service Mesh 3.0** and **Gateway API** in OpenShift are Technology Preview features only. 
+**OpenShift Service Mesh 3.0** and **Gateway API** in OpenShift are Technology Preview features only at this time. 
 
 Technology Preview features are not supported with Red Hat production service level agreements (SLAs) and might not be functionally complete. Red Hat does not recommend using them in production. These features provide early access to upcoming product features, enabling customers to test functionality and provide feedback during the development process. 
 
@@ -35,7 +39,7 @@ link:https://access.redhat.com/support/offerings/techpreview[More details about 
 This Solution Pattern will update as supported releases become generally available (GA).
 ====
 
-*Contributors:* link:https://github.com/bugbiteme[Leon Levy]
+*Contributors:* link:https://github.com/bugbiteme[Leon Levy] - Red Hat OpenShift Specialist Solution Architect
 
 ++++
  <br>
