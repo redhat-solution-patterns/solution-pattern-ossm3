@@ -1,4 +1,4 @@
-= Solution Pattern: Name Template
+= Solution Pattern: Solution Patterns - Optimizing Traffic and Observability with OpenShift Service Mesh 3
 :sectnums:
 :sectlinks:
 :doctype: book

@@ -1,4 +1,4 @@
-= Solution Pattern: Name Template
+= Solution Pattern: Solution Patterns - Optimizing Traffic and Observability with OpenShift Service Mesh 3
 :sectnums:
 :sectlinks:
 :doctype: book
@@ -18,7 +18,8 @@ To provision the demo, you will perform the following steps, each explained in d
 
 To check if you have the CLI tools, open your terminal and use the following command:
 
-[.console]
+[.console-input]
+[source,shell script]
 ----
 oc version
 ----
@@ -74,7 +75,7 @@ oc login --token=<token> --server=<server>
 
 * Clone the following Git repository:
 
-[.console]
+[.console-input]
 [source,shell script]
 ----
 git clone https://github.com/bugbiteme/ossm-3-demo.git
@@ -86,7 +87,7 @@ Ensure you are in the top-level directory of the project: `./ossm-3-demo`.
 
 Run the following script to install the listed Operators and Gateway API, and wait for it to complete:
 
-[.console]
+[.console-input]
 [source,shell script]
 ----
 sh ./install_operators.sh
@@ -98,7 +99,7 @@ Ensure you are in the top-level directory of the project: `./ossm-3-demo`.
 
 Run the following script to implement Service Mesh and the example applications, and wait for it to complete:
 
-[.console]
+[.console-input]
 [source,shell script]
 ----
 sh ./install_ossm3_demo.sh
@@ -128,9 +129,11 @@ image::bookinfo-01.svg[width=100%]
 
 You can access the main bookinfo page using the Ingress route shown at the end of the demo install script, or run the command:
 
+[.console-input]
+[source,shell script]
 ----
 export INGRESSHOST=$(oc get route istio-ingressgateway -n istio-ingress -o=jsonpath='{.spec.host}')
-echo http://${INGRESSHOST}/productpage
+echo http://$INGRESSHOST/productpage
 ----
 
 And open the link in a web browser.
@@ -139,6 +142,8 @@ image::bookinfo-02.png[width=50%]
 
 `INGRESSHOST` is the URL provided by the Istio Gateway `istio-ingressgateway`, deployed in the `istio-ingress` namespace.
 
+[.console-input]
+[source,shell script]
 ----
 oc get deployment -n istio-ingress istio-ingressgateway -o yaml
 ----
@@ -254,10 +259,11 @@ We can get a better view of how our services are interacting with one another wh
 
 To obtain the Kiali URL, you can run the following commands:
 
-[source,bash]
+[.console-input]
+[source,shell script]
 ----
 export KIALI_HOST=$(oc get route kiali -n istio-system -o=jsonpath='{.spec.host}')
-echo https://${KIALI_HOST}
+echo https://KIALI_HOST
 ----
 
 Open this URL in a new tab and login with your OpenShift cluster admin credentials
@@ -343,6 +349,8 @@ image::bookinfo-01.svg[width=100%]
 
 You can access the front end of the RestAPI using the Ingress route shown at the end of the demo install script, or run the command:
 
+[.console-input]
+[source,shell script]
 ----
 export GATEWAY=$(oc get gateway hello-gateway -n istio-ingress -o template --template='{{(index .status.addresses 0).value}}')
 
@@ -355,6 +363,8 @@ curl -s $GATEWAY/hello-service
 
 Before we continue, be sure to run the script
 
+[.console-input]
+[source,shell script]
 ----
 sh scripts/generate-traffic.sh 
 ----
@@ -476,7 +486,8 @@ From the OpenShift web console, when looking at the topology of the `rest-api-wi
 
 image::rest-01.png[width=75%] 
 
-
+[.console-input]
+[source,shell script]
 ----
 export GATEWAY=$(oc get gateway hello-gateway -n istio-ingress -o template --template='{{(index .status.addresses 0).value}}')
 curl -s $GATEWAY/hello-service
@@ -575,6 +586,8 @@ image::canary-03.png[width=100%]
 
 In the second terminal, run the script `canary-rollout.sh`
 
+[.console-input]
+[source,shell script]
 ----
 sh scripts/canary-rollout.sh
 ----
@@ -593,6 +606,8 @@ image::canary-07.png[width=100%]
 
 If you would like to roll traffic back to `v1`, run the command:
 
+[.console-input]
+[source,shell script]
 ----
 oc apply -k ./resources/application/kustomize/overlays/pod 
 ----
