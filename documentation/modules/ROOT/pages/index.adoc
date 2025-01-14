@@ -38,7 +38,9 @@ Technology Preview features are not supported with Red Hat production service le
 
 link:https://access.redhat.com/support/offerings/techpreview[More details about Technology Preview terms]
 
-link:https://docs.openshift.com/container-platform/4.17/service_mesh/v2x/servicemesh-release-notes.html#gateway-api-ga-cluster-wide-deployments-ossm-2-6-0_ossm-release-notes[Service Mesh Release Notes]
+link:https://docs.openshift.com/container-platform/4.17/service_mesh/v2x/servicemesh-release-notes.html#gateway-api-ga-cluster-wide-deployments-ossm-2-6-0_ossm-release-notes[Service Mesh 2.x Release Notes]
+
+link:https://docs.openshift.com/service-mesh/3.0.0tp1/ossm-release-notes/ossm-release-notes-assembly.html[Service Mesh 3 Tech Preview Release Notes]
 
 This Solution Pattern will update as supported releases become generally available (GA).
 ====
