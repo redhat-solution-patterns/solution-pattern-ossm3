@@ -30,11 +30,15 @@ This solution brief demonstrates how OpenShift Service Mesh 3 empowers platform 
 ++++
 [IMPORTANT]
 ====
-**OpenShift Service Mesh 3.0** and **Gateway API** in OpenShift are Technology Preview features only at this time. 
+**OpenShift Service Mesh 3.0** is Technology Preview only at this time. 
+
+**Gateway API** became generally available in OpenShift Service Mesh 2.6, supporting the Kubernetes Gateway API version 1.0.0. This functionality is exclusive to Red Hat OpenShift Service Mesh, and the Gateway API custom resource definitions (CRDs) are not supported outside this context.
 
 Technology Preview features are not supported with Red Hat production service level agreements (SLAs) and might not be functionally complete. Red Hat does not recommend using them in production. These features provide early access to upcoming product features, enabling customers to test functionality and provide feedback during the development process. 
 
 link:https://access.redhat.com/support/offerings/techpreview[More details about Technology Preview terms]
+
+link:https://docs.openshift.com/container-platform/4.17/service_mesh/v2x/servicemesh-release-notes.html#gateway-api-ga-cluster-wide-deployments-ossm-2-6-0_ossm-release-notes[Service Mesh Release Notes]
 
 This Solution Pattern will update as supported releases become generally available (GA).
 ====
