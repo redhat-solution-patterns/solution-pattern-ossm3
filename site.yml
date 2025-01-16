@@ -6,6 +6,9 @@ site:
   url: https://redhat-solution-patterns.github.io/solution-patterns/
   start_page: solution-pattern-template::index.adoc
 
+keys:
+  google_analytics: 'G-RE43KB33S7'
+
 content:
   sources:
     - url: ./
