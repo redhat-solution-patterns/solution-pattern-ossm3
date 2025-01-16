@@ -23,7 +23,7 @@ A key benefit of OpenShift Service Mesh is that it, along with most of its criti
 
 By standardizing these capabilities at the platform level and bundling them into the OpenShift subscription, OpenShift Service Mesh enables teams to build, scale, and manage microservices architectures with minimal complexity and maximum support. This allows developers to return their focus to innovation and delivering business value.
 
-This solution brief demonstrates how OpenShift Service Mesh 3 empowers platform teams to manage traffic flows with precision, including showcasing a canary deployment for safe, incremental rollouts. Additionally, it highlights how observability insights help detect and resolve issues quickly, ensuring reliability and resiliency across hybrid cloud environments.
+This solution pattern demonstrates how OpenShift Service Mesh 3 empowers platform teams to manage traffic flows with precision, including showcasing a canary deployment for safe, incremental rollouts. Additionally, it highlights how observability insights help detect and resolve issues quickly, ensuring reliability and resiliency across hybrid cloud environments.
 
 ++++
  <br>
