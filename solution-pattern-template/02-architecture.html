@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Solution Pattern: Solution Patterns - Optimizing Traffic and Observability with OpenShift Service Mesh 3 :: Solution Patterns for Cloud Native Architectures</title>
+    <link rel="canonical" href="https://redhat-solution-patterns.github.io/solution-patterns/solution-pattern-template/02-architecture.html">
+    <link rel="prev" href="index.html">
+    <link rel="next" href="03-demo.html">
+    <meta name="generator" content="Antora 3.0.0">
+    <link rel="stylesheet" href="../_/css/site.css">
+<link rel="icon" href="../_/img/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RE43KB33S7"></script>
+<script>function gtag() { dataLayer.push(arguments) }; window.dataLayer = window.dataLayer || []; gtag('js', new Date()); gtag('config', 'G-RE43KB33S7')</script>
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" style="font-size: 20px; color: white"
+        href="https://redhat-solution-patterns.github.io/solution-patterns">
+        <img src="../_/img/logo.png" height="35px" alt="Solution Patterns">&nbsp; Solution Patterns for Cloud Native Architectures</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Architectures &amp; Patterns</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://www.redhat.com/architect/portfolio/" target="_blank">Portfolio Architecture&nbsp; </a>
+            <a class="navbar-item" href="https://redhat-solution-patterns.github.io/solution-patterns/patterns.html"  target="_blank">Solution Patterns </a>
+            <a class="navbar-item" href="https://validatedpatterns.io/" target="_blank">Validated Patterns&nbsp;</a>
+            <a class="navbar-item" href="https://catalog.redhat.com/solutions" target="_blank">Ecosystem Solutions&nbsp;</a>
+          </div>
+        </div>
+
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Resources</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" target="_blank" href="https://developers.redhat.com">Red Hat Developers</a>
+            <a class="navbar-item" target="_blank" href="https://developers.redhat.com/app-dev-platform">App Dev Platform</a>
+            <a class="navbar-item" target="_blank" href="https://www.redhat.com/en/products/application-foundations">Red Hat Application Services</a>
+          </div>
+        </div>
+
+          <a class="navbar-item" target="_blank" href="https://github.com/redhat-solution-patterns/redhat-solution-patterns.github.io/issues">Feedback</a>
+          <a class="navbar-item" target="_blank" href="https://redhat-solution-patterns.github.io/solution-patterns/contributors-guide.html">Contribute</a>
+
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="solution-pattern-template" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html" class=" query-params-link">OpenShift Service Mesh 3</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="index.html">1. Home page</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="index.html#use-cases">1.1 Use cases</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="index.html#_the_story_behind_this_solution_pattern">1.2 The story behind this solution pattern</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="index.html#_the_solution">1.3 The solution</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="02-architecture.html">2. Architecture</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#tech_stack">2.1. Technology stack</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#in_depth">2.2. An in-depth look at the solution&#8217;s architecture</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#more_tech">2.3. More about the technology stack</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="03-demo.html">3. See the Solution in Action</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03-demo.html#_demonstration">3.1. Prerequisites</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03-demo.html#_run_the_demonstration">3.2. Run this demonstration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03-demo.html#_before_getting_started">3.3. Pre-requisites</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03-demo.html#_installing_the_demo">3.4. Installing the demo</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03-demo.html#_walkthrough_guide">3.5. Walkthrough guide</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="developer-resources.html">4. Developer Resources</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <span class="nav-text"><a href="https://redhat-solution-patterns.github.io/solution-patterns/patterns.html" target="_blank" rel="noopener">Explore Red Hat Solution Patterns</a></span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">OpenShift Service Mesh 3</span>
+    <span class="version">master</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <span class="title">OpenShift Service Mesh 3</span>
+      <ul class="versions">
+        <li class="version is-current">
+          <a href="index.html">master</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">OpenShift Service Mesh 3</a></li>
+    <li><a href="02-architecture.html">2. Architecture</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/redhat-solution-patterns/solution-pattern-ossm3/edit/main/documentation/modules/ROOT/pages/02-architecture.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">Solution Pattern: Solution Patterns - Optimizing Traffic and Observability with OpenShift Service Mesh 3</h1>
+<h1 id="_architecture" class="sect0"><a class="anchor" href="#_architecture"></a><a class="link" href="#_architecture">Architecture</a></h1>
+<div class="sect1">
+<h2 id="_common_challenges_addressed"><a class="anchor" href="#_common_challenges_addressed"></a><a class="link" href="#_common_challenges_addressed">1. Common Challenges addressed</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In modern application architectures based on containers and Kubernetes, developers typically aim to focus on delivering the core business logic of the services they build. However, for these services to comply with organizational requirements such as security, monitoring, high-availability networking, and other operational needs, significant additional overhead is required. These operational concerns often involve tasks unrelated to the core function of the service, such as enforcing security policies, managing traffic flows, enabling service-to-service communication, and ensuring observability.</p>
+</div>
+<div class="paragraph">
+<p>This leads to a situation where a microservice must not only handle its business logic but also embed capabilities like traffic management, resilience, and telemetry—all of which add complexity and dilute the agility that microservices architectures are meant to provide.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/overhead-01.png" alt="overhead 01" width="75%">
+</div>
+</div>
+<div class="paragraph">
+<p>Now imagine having to custom-build and manage this operational overhead for every single microservice in an application, especially when these services are written in various programming languages and frameworks. The lack of standardization across the stack results in:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Inconsistent Security Policies</strong>: Different teams may implement varying levels of security depending on their tools and knowledge, leading to vulnerabilities.</p>
+</li>
+<li>
+<p><strong>Limited Observability</strong>: Without a unified approach to logging, metrics, and tracing, troubleshooting and performance optimization become tedious and time-consuming.</p>
+</li>
+<li>
+<p><strong>Inefficient Traffic Management</strong>: Developers may struggle to implement traffic control mechanisms like retries, load balancing, or circuit breaking without a standardized solution.</p>
+</li>
+<li>
+<p><strong>Decreased Developer Productivity</strong>: Engineers spend more time on operational concerns than on delivering business value, reducing overall velocity.</p>
+</li>
+<li>
+<p><strong>Loss of Agility in Microservices</strong>: The promised agility of microservices gets undermined by the fragmented, ad-hoc implementation of cross-cutting concerns.</p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="_how_openshift_service_mesh_solves_these_challenges"><a class="anchor" href="#_how_openshift_service_mesh_solves_these_challenges"></a><a class="link" href="#_how_openshift_service_mesh_solves_these_challenges">1.1. How OpenShift Service Mesh Solves These Challenges</a></h3>
+<div class="imageblock">
+<div class="content">
+<img src="_images/ossm-use-cases.png" alt="ossm use cases" width="100%">
+</div>
+</div>
+<div class="paragraph">
+<p><strong>OpenShift Service Mesh</strong> addresses these challenges by providing a platform-native, unified solution that abstracts away the operational complexities of microservices architectures. It allows developers to focus solely on the business logic of their services while enabling platform teams to:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Enforce Consistent Security Policies</strong>: Mutual TLS (mTLS) encryption and fine-grained access controls are implemented out of the box, ensuring all services adhere to a uniform security baseline.</p>
+</li>
+<li>
+<p><strong>Enable Seamless Observability</strong>: Built-in platform tools like <strong>Distributed Tracing</strong>, <strong>Kiali</strong>, and <strong>Prometheus</strong> provide centralized tracing, visualization, and monitoring, giving teams actionable insights across the service mesh.</p>
+</li>
+<li>
+<p><strong>Streamline Traffic Management</strong>: Intelligent traffic routing, load balancing, and support for advanced deployment strategies (e.g., canary releases) simplify managing and optimizing service-to-service communication.</p>
+</li>
+<li>
+<p><strong>Enhance Reliability and Resilience</strong>: Features like automatic retries, circuit breakers, and failover mechanisms ensure high availability even under challenging network conditions.</p>
+</li>
+<li>
+<p><strong>Support Kubernetes-Native Standards</strong>: OpenShift Service Mesh 3&#8217;s support for the Kubernetes Gateway API allows for modern, scalable management of ingress and egress traffic across clusters.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>With few or no service code changes.</p>
+</div>
+<div class="paragraph">
+<p>OpenShift Service Mesh uses a proxy container (Envoy) that is injected into a pod to intercept and manage all network traffic for your applications. This proxy allows you to enable powerful features, like traffic control, security, and monitoring, based on the settings you define in the Service Mesh control plane in a way that is decoupled from the application code.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/ossm-01.png" alt="ossm 01" width="50%">
+</div>
+</div>
+<div class="paragraph">
+<p>The control plane takes your desired configuration, and its view of the services, and dynamically manages the proxy mesh, updating them as the rules or the environment changes.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/ossm-02.png" alt="ossm 02" width="75%">
+</div>
+</div>
+<div class="paragraph">
+<p>The data plane is the communication between services within the mesh itself.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="tech_stack"><a class="anchor" href="#tech_stack"></a><a class="link" href="#tech_stack">2. Technology Stack used in this Solution Pattern</a></h2>
+<div class="sectionbody">
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top"></th>
+<th class="tableblock halign-left valign-top"></th>
+<th class="tableblock halign-left valign-top"></th>
+<th class="tableblock halign-left valign-top"></th>
+<th class="tableblock halign-left valign-top"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="imageblock">
+<div class="content">
+<img src="_images/ossm-logo.png" alt="ossm logo" width="100" height="100">
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="imageblock">
+<div class="content">
+<img src="_images/ossm-logo-01.png" alt="ossm logo 01" width="100" height="100">
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="imageblock">
+<div class="content">
+<img src="_images/ossm-logo-02.png" alt="ossm logo 02" width="100" height="100">
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="imageblock">
+<div class="content">
+<img src="_images/ossm-logo-03.png" alt="ossm logo 03" width="100" height="100">
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="imageblock">
+<div class="content">
+<img src="_images/ossm-logo-04.png" alt="ossm logo 04" width="100" height="100">
+</div>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="ulist">
+<ul>
+<li>
+<p>Red Hat supported products</p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://www.redhat.com/en/technologies/cloud-computing/openshift">Red Hat OpenShift</a></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Red Hat OpenShift Container Platorm includes services to support Service Mesh</p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://www.redhat.com/en/blog/red-hat-openshift-service-mesh-3-now-technology-preview">OpenShift Service Mesh 3 (Tech Preivew)</a></p>
+</li>
+<li>
+<p><a href="https://docs.openshift.com/service-mesh/3.0.0tp1/observability/kiali/ossm-kiali-assembly.html">Kiali (provided by Red Hat)</a></p>
+</li>
+<li>
+<p><a href="https://docs.redhat.com/en/documentation/openshift_container_platform/4.17/html-single/red_hat_build_of_opentelemetry/index">Red Hat build of OpenTelemetry</a></p>
+</li>
+<li>
+<p><a href="https://docs.openshift.com/service-mesh/3.0.0tp1/observability/traces/ossm-distr-tracing-assembly.html">Tempo Operator (provided by Red Hat)</a></p>
+</li>
+<li>
+<p><a href="https://www.redhat.com/en/technologies/cloud-computing/openshift/observability">OpenShift Observability</a></p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Other open source products:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://min.io/">MinIO (for s3 storage)</a></p>
+</li>
+<li>
+<p><a href="https://kustomize.io/">Kustomize</a></p>
+</li>
+<li>
+<p><a href="https://gateway-api.sigs.k8s.io//">k8s Gatway API</a></p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="in_depth"><a class="anchor" href="#in_depth"></a><a class="link" href="#in_depth">3. An in-depth look at the solution&#8217;s architecture</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>OpenShift Service Mesh 3, leveraging the Kubernetes Gateway API, provides a Kubernetes-native and efficient approach to managing cluster ingress and canary deployments. Here’s how it addresses the challenges:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/flow-diagram-01.png" alt="flow diagram 01" width="100%">
+</div>
+</div>
+<div class="sect2">
+<h3 id="_traffic_splitting_with_virtual_services"><a class="anchor" href="#_traffic_splitting_with_virtual_services"></a><a class="link" href="#_traffic_splitting_with_virtual_services">3.1. <strong>Traffic Splitting with Virtual Services</strong>:</a></h3>
+<div class="ulist">
+<ul>
+<li>
+<p>The application or operations team defines a Virtual Service within OpenShift Service Mesh to split traffic dynamically between <code>v1</code> and <code>v2</code> of the back-end-service. Initially, 90% of traffic is routed to <code>v1</code>, while 10% is routed to <code>v2</code>.</p>
+</li>
+<li>
+<p>This setup ensures that most users experience the stable <code>v1</code> while <code>v2</code> is tested under real-world conditions with a small subset of traffic.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_real_time_observability"><a class="anchor" href="#_real_time_observability"></a><a class="link" href="#_real_time_observability">3.2. <strong>Real-Time Observability</strong>:</a></h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Integrated tools like Distributed Tracing and Kiali enable the team to visualize request flows and monitor key performance indicators (KPIs) such as latency, error rates, and success rates for <code>v2</code> of the back-end-service.</p>
+</li>
+<li>
+<p>The Red Hat build of OpenTelemetry provides detailed traces of user requests, helping identify performance bottlenecks or errors in <code>v2</code>.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_progressive_rollout"><a class="anchor" href="#_progressive_rollout"></a><a class="link" href="#_progressive_rollout">3.3. <strong>Progressive Rollout</strong>:</a></h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Once the team confirms that <code>v2</code> is stable, they gradually increase the traffic percentage directed to it—e.g., moving to 50/50 and eventually 100% for <code>v2</code>.</p>
+</li>
+<li>
+<p>If issues are detected, traffic can be instantly shifted back to <code>v1</code> of the back-end-service using the Virtual Service configuration, ensuring no user impact.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_secure_communication_with_mtls"><a class="anchor" href="#_secure_communication_with_mtls"></a><a class="link" href="#_secure_communication_with_mtls">3.4. <strong>Secure Communication with mTLS</strong>:</a></h3>
+<div class="ulist">
+<ul>
+<li>
+<p>All service-to-service communication between <code>v1</code>, <code>v2</code>, and other dependent services is encrypted by default with mutual TLS (mTLS). This ensures that sensitive customer data remains protected throughout the deployment process.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_platform_integration"><a class="anchor" href="#_platform_integration"></a><a class="link" href="#_platform_integration">3.5. <strong>Platform Integration</strong>:</a></h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Since OpenShift Service Mesh is included with the OpenShift Container Platform subscription, the team can leverage enterprise support and seamless integration with OpenShift Observability, minimizing operational overhead.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="more_tech"><a class="anchor" href="#more_tech"></a><a class="link" href="#more_tech">4. About the Technology Stack</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>OpenShift Service Mesh 3 is built on a modular, Kubernetes-native architecture designed to address the complexities of managing microservices communication, security, traffic management, and observability. It integrates tightly with Red Hat OpenShift, leveraging Kubernetes-native APIs and tools.</p>
+</div>
+<div class="sect2">
+<h3 id="_core_components"><a class="anchor" href="#_core_components"></a><a class="link" href="#_core_components">4.1. <strong>Core Components</strong></a></h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Istio</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Purpose: Core of the service mesh, responsible for service-to-service communication, traffic management, and policy enforcement.</p>
+</li>
+<li>
+<p>Key Features:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Intelligent traffic routing (e.g., canary deployments, mirroring).</p>
+</li>
+<li>
+<p>Mutual TLS (mTLS) for secure communications.</p>
+</li>
+<li>
+<p>Resiliency features like retries, circuit breaking, and failover.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Deployment: Control plane components (<code>istiod</code>, <code>istio-cni</code>) run in dedicated namespaces (<code>istio-system</code>, <code>istio-cni</code>).</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Gateway</strong> (Gateway API)</p>
+<div class="ulist">
+<ul>
+<li>
+<p>** Purpose: Handle external traffic entering the mesh and secure egress traffic leaving the mesh.</p>
+</li>
+<li>
+<p>Describes how traffic can be translated to Services within the cluster</p>
+</li>
+<li>
+<p>Key Features:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Centralized traffic entry/exit point.</p>
+</li>
+<li>
+<p>Policy enforcement and telemetry collection.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Can express capabilities like HTTP header manipulation, traffic weighting &amp; mirroring, TCP/UDP routing</p>
+</li>
+<li>
+<p>May be attached to one or more Route references which serve to direct traffic for a subset of traffic to a specific service</p>
+</li>
+<li>
+<p>Uses Istio for ingress traffic management.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>HTTPRoute</strong> (Gateway API)</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Enables advanced routing capabilities for service ingress.</p>
+</li>
+<li>
+<p>Specifies routing behavior of HTTP requests from a Gateway listener to an kubernetes <code>Service</code> resource associated with a pod.</p>
+</li>
+<li>
+<p>Each Route includes a way to reference the parent resources it wants to attach to.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Distributed Tracing (via Tempo)</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Purpose: Distributed tracing for monitoring and debugging service interactions.</p>
+</li>
+<li>
+<p>Key Features:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Visualize and trace request flows across services.</p>
+</li>
+<li>
+<p>Identify performance bottlenecks and latency issues.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Deployment: Deployed as part of the OpenShift Service Mesh stack in a dedicated namespace (<code>tracing-system</code>).</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Kiali</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Purpose: Visualization and management tool for the service mesh.</p>
+</li>
+<li>
+<p>Key Features:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Graphical representation of service communication.</p>
+</li>
+<li>
+<p>Real-time traffic monitoring and health metrics.</p>
+</li>
+<li>
+<p>Istio configuration</p>
+</li>
+<li>
+<p>OSSM Plugin for OpenShift Web Console</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Deployment: Runs in the same namespace as the control plane or a dedicated namespace (<code>istio-system</code>).</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>OpenShift Observability</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Purpose: Metrics collection and visualization.</p>
+</li>
+<li>
+<p>Key Features:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Collect and store time-series data for service mesh metrics.</p>
+</li>
+<li>
+<p>Provide dashboards in the OpenShift Web console for performance and health monitoring.</p>
+</li>
+<li>
+<p>Utilizes <code>SystemMonitor</code> and <code>PodMonitor</code> CRDs to gather Service Mesh controle plane and namespace-level metrics</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Ingress/Egress Gateways</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Purpose: Handle external traffic entering the mesh and secure egress traffic leaving the mesh.</p>
+</li>
+<li>
+<p>Key Features:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Centralized traffic entry/exit point.</p>
+</li>
+<li>
+<p>Policy enforcement and telemetry collection.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_key_architectural_decisions"><a class="anchor" href="#_key_architectural_decisions"></a><a class="link" href="#_key_architectural_decisions">4.2. <strong>Key Architectural Decisions</strong></a></h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Kubernetes Gateway API Support</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>OpenShift Service Mesh 3 incorporates the Kubernetes Gateway API to modernize ingress and egress traffic management. This provides better scalability and integration compared to legacy Service Mesh (OSSM 2.x) ingress/egress configurations.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Centralized Observability</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>By integrating Distributed Tracing, Kiali, and OpenShift Observability, OSSM provides a unified observability stack, reducing the need for separate tooling and ensuring consistent monitoring.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>mTLS by Default</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>All service-to-service communications within the mesh are secured using mutual TLS, meeting enterprise-grade security requirements out of the box.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="index.html" class="query-params-link">1. Home page</a></span>
+  <span class="next"><a href="03-demo.html" class="query-params-link">3. See the Solution in Action</a></span>
+</nav>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <img
+          src="../_/img/app-services-logo.png" height="40px" alt="Cloud Native Architecture Solution Patterns"  href="https://redhat.com" ></a>
+</footer><script src="../_/js/vendor/clipboard.js"></script>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

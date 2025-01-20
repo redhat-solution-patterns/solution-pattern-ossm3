@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Solution Pattern: Solution Patterns - Optimizing Traffic and Observability with OpenShift Service Mesh 3 :: Solution Patterns for Cloud Native Architectures</title>
+    <link rel="canonical" href="https://redhat-solution-patterns.github.io/solution-patterns/solution-pattern-template/03-demo.html">
+    <link rel="prev" href="02-architecture.html">
+    <link rel="next" href="developer-resources.html">
+    <meta name="generator" content="Antora 3.0.0">
+    <link rel="stylesheet" href="../_/css/site.css">
+<link rel="icon" href="../_/img/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RE43KB33S7"></script>
+<script>function gtag() { dataLayer.push(arguments) }; window.dataLayer = window.dataLayer || []; gtag('js', new Date()); gtag('config', 'G-RE43KB33S7')</script>
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" style="font-size: 20px; color: white"
+        href="https://redhat-solution-patterns.github.io/solution-patterns">
+        <img src="../_/img/logo.png" height="35px" alt="Solution Patterns">&nbsp; Solution Patterns for Cloud Native Architectures</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Architectures &amp; Patterns</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://www.redhat.com/architect/portfolio/" target="_blank">Portfolio Architecture&nbsp; </a>
+            <a class="navbar-item" href="https://redhat-solution-patterns.github.io/solution-patterns/patterns.html"  target="_blank">Solution Patterns </a>
+            <a class="navbar-item" href="https://validatedpatterns.io/" target="_blank">Validated Patterns&nbsp;</a>
+            <a class="navbar-item" href="https://catalog.redhat.com/solutions" target="_blank">Ecosystem Solutions&nbsp;</a>
+          </div>
+        </div>
+
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Resources</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" target="_blank" href="https://developers.redhat.com">Red Hat Developers</a>
+            <a class="navbar-item" target="_blank" href="https://developers.redhat.com/app-dev-platform">App Dev Platform</a>
+            <a class="navbar-item" target="_blank" href="https://www.redhat.com/en/products/application-foundations">Red Hat Application Services</a>
+          </div>
+        </div>
+
+          <a class="navbar-item" target="_blank" href="https://github.com/redhat-solution-patterns/redhat-solution-patterns.github.io/issues">Feedback</a>
+          <a class="navbar-item" target="_blank" href="https://redhat-solution-patterns.github.io/solution-patterns/contributors-guide.html">Contribute</a>
+
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="solution-pattern-template" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html" class=" query-params-link">OpenShift Service Mesh 3</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="index.html">1. Home page</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="index.html#use-cases">1.1 Use cases</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="index.html#_the_story_behind_this_solution_pattern">1.2 The story behind this solution pattern</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="index.html#_the_solution">1.3 The solution</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="02-architecture.html">2. Architecture</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02-architecture.html#tech_stack">2.1. Technology stack</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02-architecture.html#in_depth">2.2. An in-depth look at the solution&#8217;s architecture</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02-architecture.html#more_tech">2.3. More about the technology stack</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="03-demo.html">3. See the Solution in Action</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#_demonstration">3.1. Prerequisites</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#_run_the_demonstration">3.2. Run this demonstration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#_before_getting_started">3.3. Pre-requisites</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#_installing_the_demo">3.4. Installing the demo</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#_walkthrough_guide">3.5. Walkthrough guide</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="developer-resources.html">4. Developer Resources</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <span class="nav-text"><a href="https://redhat-solution-patterns.github.io/solution-patterns/patterns.html" target="_blank" rel="noopener">Explore Red Hat Solution Patterns</a></span>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">OpenShift Service Mesh 3</span>
+    <span class="version">master</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <span class="title">OpenShift Service Mesh 3</span>
+      <ul class="versions">
+        <li class="version is-current">
+          <a href="index.html">master</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">OpenShift Service Mesh 3</a></li>
+    <li><a href="03-demo.html">3. See the Solution in Action</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/redhat-solution-patterns/solution-pattern-ossm3/edit/main/documentation/modules/ROOT/pages/03-demo.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">Solution Pattern: Solution Patterns - Optimizing Traffic and Observability with OpenShift Service Mesh 3</h1>
+<h1 id="_see_the_solution_in_action" class="sect0"><a class="anchor" href="#_see_the_solution_in_action"></a><a class="link" href="#_see_the_solution_in_action">See the Solution in Action</a></h1>
+<div class="openblock partintro">
+<div class="content">
+Before walking through the solution, ensure all necessary prerequisites are in place.
+</div>
+</div>
+<div class="sect1">
+<h2 id="before_getting_started"><a class="anchor" href="#before_getting_started"></a><a class="link" href="#before_getting_started">1. Prerequisites</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To provision the demo, you will perform the following steps, each explained in detail in the next sections:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>You will need an OpenShift cluster with cluster-admin privileges. This solution pattern has been tested on OpenShift 4.17.</p>
+</li>
+<li>
+<p>Ensure you have the OpenShift CLI tool <code>oc</code> installed and the ability to run shell scripts in your local environment, such as your laptop.</p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="_cli_tools"><a class="anchor" href="#_cli_tools"></a><a class="link" href="#_cli_tools">1.1. CLI Tools</a></h3>
+<div class="paragraph">
+<p>To check if you have the CLI tools, open your terminal and use the following command:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell script hljs" data-lang="shell script">oc version</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_setup"><a class="anchor" href="#_setup"></a><a class="link" href="#_setup">2. Setup</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In this demo, the deployment scripts use the OpenShift CLI to:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Install the following OpenShift Operators:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>OpenShift Service Mesh 3 (Tech Preview)</p>
+</li>
+<li>
+<p>Kiali</p>
+</li>
+<li>
+<p>OpenTelemetry</p>
+</li>
+<li>
+<p>Tempo</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Enable Gateway API (Tech Preview).</p>
+</li>
+<li>
+<p>Implement an OpenShift Service Mesh solution:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Provision and configure OpenShift Service Mesh control plane and other Istio supporting components (CRs and namespaces):</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Istio (istiod)</p>
+</li>
+<li>
+<p>Istio-CNI (pod networking)</p>
+</li>
+<li>
+<p>Ingress-Gateway (for Gateway API and Istio Gateway)</p>
+</li>
+<li>
+<p>Kiali</p>
+</li>
+<li>
+<p>OpenShift Service Mesh Console Plugin</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Provision and configure a <code>tracing-system</code> via a TempoStack for distributed tracing:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>MinIO for persistent S3 storage</p>
+</li>
+<li>
+<p>Tempo</p>
+</li>
+<li>
+<p>OpenTelemetry CRs:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>OpenTelemetryCollector</p>
+</li>
+<li>
+<p>Telemetry</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Monitoring Configuration:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Enable User Monitoring with OpenShift Observability (Prometheus).</p>
+</li>
+<li>
+<p>Enable SystemMonitor in the <code>istio-system</code> namespace.</p>
+</li>
+<li>
+<p>Enable PodMonitor in all Istio-related namespaces as well as application namespaces:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>istio-system</code></p>
+</li>
+<li>
+<p><code>istio-ingress</code></p>
+</li>
+<li>
+<p><code>bookinfo</code></p>
+</li>
+<li>
+<p><code>rest-api-with-mesh</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Label all Istio-related and application namespaces with <code>istio-injection=enabled</code>.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Sample Applications for Demo and Use Cases:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>bookinfo</code>: A sample multi-service application to demonstrate OSSM observability.</p>
+</li>
+<li>
+<p><code>rest-api-with-mesh</code>: A simple RestAPI application containing a front-end API that calls our back-end API, deployed via Canary deployment.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>There is also a set of scripts we will use to test and deploy our RestAPI backend from <code>v1</code> to <code>v2</code>.</p>
+</div>
+<div class="sect2">
+<h3 id="installing_the_demo"><a class="anchor" href="#installing_the_demo"></a><a class="link" href="#installing_the_demo">2.1. Get the Deployment Scripts</a></h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Log in to your OpenShift cluster as cluster-admin via the OpenShift web console.</p>
+</li>
+<li>
+<p>Click on your username in the top-right corner and select <strong>Copy login command</strong>. This will open another tab where you will need to log in again.</p>
+</li>
+<li>
+<p>Click on the <strong>Display token</strong> link, and copy the command under <strong>Log in with this token</strong>. The command will look like this:</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell script hljs" data-lang="shell script">oc login --token=&lt;token&gt; --server=&lt;server&gt;</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Clone the following Git repository:</p>
+</li>
+</ul>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell script hljs" data-lang="shell script">git clone https://github.com/bugbiteme/ossm-3-demo.git</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_install_operators_and_enable_gateway_api"><a class="anchor" href="#_install_operators_and_enable_gateway_api"></a><a class="link" href="#_install_operators_and_enable_gateway_api">2.2. Install Operators and Enable Gateway API</a></h3>
+<div class="paragraph">
+<p>Ensure you are in the top-level directory of the project: <code>./ossm-3-demo</code>.</p>
+</div>
+<div class="paragraph">
+<p>Run the following script to install the listed Operators and Gateway API, and wait for it to complete:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell script hljs" data-lang="shell script">sh ./install_operators.sh</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_install_ossm_solution_and_example_applications"><a class="anchor" href="#_install_ossm_solution_and_example_applications"></a><a class="link" href="#_install_ossm_solution_and_example_applications">2.3. Install OSSM Solution and Example Applications</a></h3>
+<div class="paragraph">
+<p>Ensure you are in the top-level directory of the project: <code>./ossm-3-demo</code>.</p>
+</div>
+<div class="paragraph">
+<p>Run the following script to implement Service Mesh and the example applications, and wait for it to complete:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell script hljs" data-lang="shell script">sh ./install_ossm3_demo.sh</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Expected final output:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell script hljs" data-lang="shell script">====================================================================================================
+Ingress route for bookinfo is: http://istio-ingressgateway-istio-ingress.apps.&lt;domain&gt;/productpage
+To test RestAPI: sh ./scripts/test-api.sh
+Kiali route is: https://kiali-istio-system.apps.&lt;domain&gt;
+====================================================================================================</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="demonstration"><a class="anchor" href="#demonstration"></a><a class="link" href="#demonstration">3. Walkthrough Guide</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>How to run through the demo.</p>
+</div>
+<div class="sect2">
+<h3 id="_exploring_the_bookinfo_application"><a class="anchor" href="#_exploring_the_bookinfo_application"></a><a class="link" href="#_exploring_the_bookinfo_application">3.1. Exploring the Bookinfo Application</a></h3>
+<div class="paragraph">
+<p>In this section, we will explore the example <code>bookinfo</code> application, which is based on the sample application found <a href="https://istio.io/latest/docs/examples/bookinfo/">here</a>.</p>
+</div>
+<div class="paragraph">
+<p><code>bookinfo</code> uses the Istio Gateway resource <code>gateways.networking.istio.io</code>, rather than Gateway API (which we will explore later).</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/bookinfo-01.svg" alt="bookinfo 01" width="100%">
+</div>
+</div>
+<div class="paragraph">
+<p>You can access the main bookinfo page using the Ingress route shown at the end of the demo install script, or run the command:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell script hljs" data-lang="shell script">export INGRESSHOST=$(oc get route istio-ingressgateway -n istio-ingress -o=jsonpath='{.spec.host}')
+echo http://$INGRESSHOST/productpage</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And open the link in a web browser.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/bookinfo-02.png" alt="bookinfo 02" width="50%">
+</div>
+</div>
+<div class="paragraph">
+<p><code>INGRESSHOST</code> is the URL provided by the Istio Gateway <code>istio-ingressgateway</code>, deployed in the <code>istio-ingress</code> namespace.</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell script hljs" data-lang="shell script">oc get deployment -n istio-ingress istio-ingressgateway -o yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This deployment represents an Istio-native Gateway deployed in the <code>istio-ingress</code> namespace. It handles ingress traffic into the service mesh.</p>
+</div>
+<div class="paragraph">
+<p>The <code>istio-ingressgateway</code> is a gateway deployment that manages external traffic into the Istio mesh, functioning as a Kubernetes Gateway or Ingress Gateway. It uses an Envoy proxy to route requests to appropriate services within the mesh.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Role in Istio:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>This deployment serves as an entry point for external traffic into the service mesh.</p>
+</li>
+<li>
+<p>It routes requests to internal services based on <code>VirtualService</code> and <code>Gateway</code> configurations.</p>
+</li>
+<li>
+<p>It supports load balancing, TLS termination, and traffic routing rules.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The <strong>Gateway</strong> resource (<code>bookinfo-gateway</code>) serves as a configuration for traffic routing rules, and it targets the ingress-gateway (<code>istio-ingressgateway</code> deployment) by matching the label <code>istio: ingressgateway</code>. The ingress-gateway deployment acts as the entry point into the Istio service mesh, applying these routing rules and forwarding traffic to services within the mesh.</p>
+</div>
+<div class="paragraph">
+<p>This separation of control plane configuration (Gateway resource) and data plane traffic handling (ingress-gateway) allows for flexibility, scalability, and Kubernetes-native traffic management.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>oc get gateways.networking.istio.io -n bookinfo -o yaml
+
+apiVersion: v1
+items:
+- apiVersion: networking.istio.io/v1
+  kind: Gateway
+  metadata:
+    name: bookinfo-gateway
+    namespace: bookinfo
+  spec:
+    selector:
+      istio: ingressgateway
+    servers:
+    - hosts:
+      - '*'
+      port:
+        name: http
+        number: 8080
+        protocol: HTTP
+kind: List</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Another thing to look at is the namespace of the <code>bookinfo</code> app itself and take note of the label <code>istio-injection</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>apiVersion: v1
+kind: Namespace
+metadata:
+...
+  labels:
+    istio-injection: enabled
+...</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The label <code>istio-injection: enabled</code> on a Namespace is critical because it enables automatic sidecar injection for all pods deployed within that namespace. This label is a core part of Istio&#8217;s architecture and is essential for integrating services into the service mesh.</p>
+</div>
+<div class="paragraph">
+<p><strong>Why is <code>istio-injection: enabled</code> Important?</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Automatic Sidecar Injection</p>
+<div class="ulist">
+<ul>
+<li>
+<p>When the <code>istio-injection: enabled</code> label is added to a namespace, the Istio sidecar injector webhook is triggered.</p>
+</li>
+<li>
+<p>This webhook automatically injects the Envoy sidecar proxy container into each pod deployed in the namespace.</p>
+</li>
+<li>
+<p>The Envoy proxy is responsible for:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Intercepting and managing inbound and outbound traffic.</p>
+</li>
+<li>
+<p>Applying security features like mutual TLS (mTLS).</p>
+</li>
+<li>
+<p>Enabling observability tools such as tracing and metrics collection.</p>
+</li>
+<li>
+<p>Enforcing traffic routing rules (e.g., canary deployments, retries, circuit breakers).</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Integration into the Service Mesh</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Without the Envoy sidecar, the pods would not be able to:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Participate in the service mesh.</p>
+</li>
+<li>
+<p>Benefit from Istio&#8217;s traffic management, observability, and security capabilities.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>The <code>istio-injection: enabled</code> label ensures that all services within the namespace are automatically onboarded into the mesh.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The output of <code>oc get pods -n bookinfo</code> shows that the Bookinfo application is running in the <code>bookinfo</code> namespace with multiple services and versions. The key observation here is that each pod has 2/2 containers running, indicating that Istio sidecar injection is enabled in this namespace.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get pods -n bookinfo
+
+NAME                             READY   STATUS    RESTARTS   AGE
+details-v1-65cfcf56f9-hfl47      2/2     Running   2          26h
+kiali-traffic-generator-hv595    2/2     Running   2          26h
+productpage-v1-d5789fdfb-6gs76   2/2     Running   2          26h
+ratings-v1-7c9bd4b87f-8979h      2/2     Running   2          26h
+reviews-v1-6584ddcf65-45q2k      2/2     Running   2          26h
+reviews-v2-6f85cb9b7c-rr7kc      2/2     Running   2          26h
+reviews-v3-6f5b775685-8mfwj      2/2     Running   2          26h</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To get more information about the containers with in a pod, use the <code>oc describe pod &lt;pod name&gt;</code> and look in the <code>Containers</code> section:</p>
+</div>
+<div class="paragraph">
+<p>Example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>oc describe pod productpage-v1-d5789fdfb-6gs7 -n bookinfo
+
+Name:             productpage-v1-d5789fdfb-6gs76
+Namespace:        bookinfo
+...
+Containers:
+  productpage:
+    Container ID: ...
+    ...
+  istio-proxy:
+    Container ID:...
+    ...
+...</pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_openshift_web_console_view"><a class="anchor" href="#_openshift_web_console_view"></a><a class="link" href="#_openshift_web_console_view">3.1.1. OpenShift Web Console View</a></h4>
+<div class="paragraph">
+<p>From the OpenShift web console, when looking at the topology of the <code>bookinfo</code> namespace, we see a number of deployments. But we really cannot see how these services interact with one another.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/bookinfo-03.png" alt="bookinfo 03" width="75%">
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_kiali_view"><a class="anchor" href="#_kiali_view"></a><a class="link" href="#_kiali_view">3.1.2. Kiali View</a></h4>
+<div class="paragraph">
+<p>We can get a better view of how our services are interacting with one another when we use the Istio observability tool Kiali.</p>
+</div>
+<div class="paragraph">
+<p>To obtain the Kiali URL, you can run the following commands:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell script hljs" data-lang="shell script">export KIALI_HOST=$(oc get route kiali -n istio-system -o=jsonpath='{.spec.host}')
+echo https://KIALI_HOST</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Open this URL in a new tab and login with your OpenShift cluster admin credentials</p>
+</div>
+<div class="sect4">
+<h5 id="_overview"><a class="anchor" href="#_overview"></a><a class="link" href="#_overview">Overview</a></h5>
+<div class="paragraph">
+<p>When you initially log into the Kiali web console, you will be brought to the <code>Overview</code> page. This is a dashboard of all non-default projects in your cluster.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/bookinfo-04.png" alt="bookinfo 04" width="75%">
+</div>
+</div>
+<div class="paragraph">
+<p>Here we can see some inbound traffic in this namespace. That is becuase we deployed a <code>kiali-traffic-generator</code> pod to coninuously call this application.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_traffic_graph"><a class="anchor" href="#_traffic_graph"></a><a class="link" href="#_traffic_graph">Traffic Graph</a></h5>
+<div class="paragraph">
+<p>To get more ganularity on this triffic, click the three dot "kebab" menu on the <code>bookinfo</code> tile and select the <code>Graph</code> option</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/bookinfo-05.png" alt="bookinfo 05" width="100%">
+</div>
+</div>
+<div class="paragraph">
+<p>Now we can see a graphical representation of the traffic in our service mesh-enabled application. You may need to resize your screen to see the details of each <code>bookinfo</code> service.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/bookinfo-06.png" alt="bookinfo 06" width="100%">
+</div>
+</div>
+<div class="paragraph">
+<p>To display more metrics on the graph, use the drop-down <code>Display</code> menu, and check some of the metrics you want to see. Feel free to experiment.</p>
+</div>
+<div class="paragraph">
+<p>Example:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/bookinfo-07.png" alt="bookinfo 07" width="100%">
+</div>
+</div>
+<div class="paragraph">
+<p>Change the graph type to <code>Versioned app graph</code> to see how traffic is being disributed between the different versions of the <code>reviews</code> service.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/bookinfo-08.png" alt="bookinfo 08" width="100%">
+</div>
+</div>
+<div class="paragraph">
+<p>This is just a sample of the observability data we can easily interpret in the Kiali graph view. We will closer look into some of the other Kiali menu items in the next few sections.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_applications"><a class="anchor" href="#_applications"></a><a class="link" href="#_applications">Applications</a></h5>
+<div class="paragraph">
+<p>The Applications view allows us to drill down into each of the services that make up the <code>bookinfo</code> application, and allows us get an overview and metrics of a particular service</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/bookinfo-09.png" alt="bookinfo 09" width="100%">
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_workloads"><a class="anchor" href="#_workloads"></a><a class="link" href="#_workloads">Workloads</a></h5>
+<div class="paragraph">
+<p>The Workloads view allows you to explore even further into each pod workload, and view similar information around metrics, as well as envoy proxy status and logs.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/bookinfo-10.png" alt="bookinfo 10" width="100%">
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_services"><a class="anchor" href="#_services"></a><a class="link" href="#_services">Services</a></h5>
+<div class="paragraph">
+<p>The Services view allows you to view by kubernetes Services. Note that the front end service <code>productpage</code> is also associated with a <code>VirtualService</code> and <code>Gateway</code> as indicated in the <code>Details</code> column.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/bookinfo-11.png" alt="bookinfo 11" width="100%">
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_istio_config"><a class="anchor" href="#_istio_config"></a><a class="link" href="#_istio_config">Istio Config</a></h5>
+<div class="paragraph">
+<p>The Istio Config view allows us to view and modify the configuration of Istio specific resources. This comes in handy, as they are not as easy to find in the OpenShift web console.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/bookinfo-12.png" alt="bookinfo 12" width="75%">
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_mesh"><a class="anchor" href="#_mesh"></a><a class="link" href="#_mesh">Mesh</a></h5>
+<div class="paragraph">
+<p>The Mesh view provides a high level view of the entire service mesh: istio-system (control plane), tracing-system (distributed tracing components), Data Plane (application namespaces), and External resources, such as Prometheus monitoring.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/bookinfo-13.png" alt="bookinfo 13" width="100%">
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_distributed_tracing"><a class="anchor" href="#_distributed_tracing"></a><a class="link" href="#_distributed_tracing">Distributed Tracing</a></h5>
+<div class="paragraph">
+<p>The Distributed Tracing option opens up a new window (Jaeger Console). Distributed Tracing is actually handled separatly from Kiali via Tempo, and is viewable with the Jaeger web console.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Distributed Tracing is not covered in this Solution Pattern, but feel free to explore this console on your own.</p>
+</div>
+<div class="paragraph">
+<p>If the Distributed Tracing page does not disply properly, ensure the URL is using <code>http</code> rather than <code>https</code></p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="walkthrough_guide"><a class="anchor" href="#walkthrough_guide"></a><a class="link" href="#walkthrough_guide">3.2. Exploring the RestAPI (<code>rest-api-with-mesh</code>) (Using Gateway API)</a></h3>
+<div class="paragraph">
+<p>In this section we will explore the our <code>hello-rest</code> application, which is the application we will be using to perform our canary deployment from <code>v1</code> to <code>v2</code> of our backend service</p>
+</div>
+<div class="paragraph">
+<p>This application uses the <strong>Kuberntetes Gateway API</strong> resource for ingress.
+image::bookinfo-01.svg[width=100%]</p>
+</div>
+<div class="paragraph">
+<p>You can access the front end of the RestAPI using the Ingress route shown at the end of the demo install script, or run the command:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell script hljs" data-lang="shell script">export GATEWAY=$(oc get gateway hello-gateway -n istio-ingress -o template --template='{{(index .status.addresses 0).value}}')
+
+curl -s $GATEWAY/hello
+curl -s $GATEWAY/hello-service</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>curl -s $GATEWAY/hello</code> returns output from the front-end service.
+`curl -s $GATEWAY/hello-service uses the front-end service to return output from the back-end service.</p>
+</div>
+<div class="paragraph">
+<p>Before we continue, be sure to run the script</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell script hljs" data-lang="shell script">sh scripts/generate-traffic.sh</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Example output:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>❯ sh scripts/generate-traffic.sh
+Tue Dec 17 14:23:23 PST 2024
+{
+  "response": {
+    "message": "Hello World from service-b-v1"
+  }
+}
+Tue Dec 17 14:23:25 PST 2024
+{
+  "response": {
+    "message": "Hello World from service-b-v1"
+  }
+}
+Tue Dec 17 14:23:26 PST 2024
+{
+  "response": {
+    "message": "Hello World from service-b-v1"
+  }
+}
+Tue Dec 17 14:23:27 PST 2024
+{
+  "response": {
+    "message": "Hello World from service-b-v1"
+  }
+}
+...</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This is a loop that calls the front end RestAPI to get information from the backend RestAPI <code>service-b-v1</code> every second in order to generate traffic for testing our canary deployment of <code>service-b-v2</code></p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Ensure you have the <code>jq</code> command line tool installed on your system in order to format the output properly</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p><code>GATEWAY</code> is the URL provided by the Gateway API <code>hello-gateway</code> gateway which is deployed in the <code>istio-ingress</code> namespace.</p>
+</div>
+<div class="paragraph">
+<p>Gateway API uses the <code>GatewayClass</code> type <code>istio</code>, so it requires OpenShift Service Mesh:</p>
+</div>
+<div class="paragraph">
+<p>GatewayClass</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>oc get gatewayclass istio -o yaml
+
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  name: istio
+spec:
+  controllerName: istio.io/gateway-controller
+  description: The default Istio GatewayClass</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Gateway</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>oc get gateway -n istio-ingress hello-gateway -o yaml
+
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  labels:
+    app: hello-gateway
+    version: v1
+  name: hello-gateway
+  namespace: istio-ingress
+spec:
+  gatewayClassName: istio
+  listeners:
+  - allowedRoutes:
+      namespaces:
+        from: All
+    name: http
+    port: 80</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As you can see, this is much cleaner than the the gateway deployment used for the <code>bookinfo</code> application.</p>
+</div>
+<div class="paragraph">
+<p>We are using the Gateway API <code>HTTPRoute</code> to associate the front-end service with the <code>Gateway</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>oc get httproute web-front-end-route -n rest-api-with-mesh -o yaml
+
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: web-front-end-route
+  namespace: rest-api-with-mesh
+spec:
+  parentRefs:
+  - group: gateway.networking.k8s.io
+    kind: Gateway # &lt;&lt;&lt;&lt; Gateway to refrerence
+    name: hello-gateway
+    namespace: istio-ingress
+  rules:
+  - backendRefs:
+    - group: ""
+      kind: Service # &lt;&lt;&lt;&lt; Service of the web-front-end pod
+      name: web-front-end
+      port: 8080
+      weight: 1
+    matches:
+    - path:
+        type: PathPrefix
+        value: /</pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_openshift_web_console_view_2"><a class="anchor" href="#_openshift_web_console_view_2"></a><a class="link" href="#_openshift_web_console_view_2">3.2.1. OpenShift Web Console View</a></h4>
+<div class="paragraph">
+<p>From the OpenShift web console, when looking at the topology of the <code>rest-api-with-mesh</code> namespace, can see the <code>web-front-end</code> and <code>service-b-v1</code> and the newly created <code>service-b-v2</code>, but as we could see with our <code>curl</code> calls and our <code>generate-traffic.sh</code> script, we are only getting data back from <code>service-b-v1</code>.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/rest-01.png" alt="rest 01" width="75%">
+</div>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell script hljs" data-lang="shell script">export GATEWAY=$(oc get gateway hello-gateway -n istio-ingress -o template --template='{{(index .status.addresses 0).value}}')
+curl -s $GATEWAY/hello-service</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>{"response":{"message":"Hello World from service-b-v1"}}</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_kiali_view_via_the_openshift_service_mesh_console_plugin_openshift_web_console"><a class="anchor" href="#_kiali_view_via_the_openshift_service_mesh_console_plugin_openshift_web_console"></a><a class="link" href="#_kiali_view_via_the_openshift_service_mesh_console_plugin_openshift_web_console">3.2.2. Kiali View via The OpenShift Service Mesh Console Plugin (OpenShift Web Console)</a></h4>
+<div class="paragraph">
+<p>This time, instead of using the Kiali Web Consle, we will observe our service mesh with the OpenShift Service Mesh plugin, which is included with Kiali.</p>
+</div>
+<div class="paragraph">
+<p>In the <code>Administrator</code> view in the OpenShift Web Console, on the left hand menu, scroll down and select <code>Service Mesh &#8594; Traffic Graph</code>.</p>
+</div>
+<div class="paragraph">
+<p>With <code>sh scripts/generate-traffic.sh</code> continuing to run in a terminal, go to the <code>Traffic Graph</code> Kiali menu and select the <code>rest-api-with-mesh</code> namespace.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/rest-02.png" alt="rest 02" width="100%">
+</div>
+</div>
+<div class="paragraph">
+<p>For the <code>Display</code> options, select:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>Traffic Distribution</code></p>
+</li>
+<li>
+<p><code>Idle Nodes</code></p>
+</li>
+<li>
+<p><code>Security</code></p>
+</li>
+<li>
+<p><code>Traffic Animation</code> (optional, but helpful)</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/rest-03.png" alt="rest 03" width="100%">
+</div>
+</div>
+<div class="paragraph">
+<p>Now we can clearly see the flow of traffic through the Gateway to our backend service, and as we can also observe, all traffic is being routed to <code>v1</code> of service-b.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/rest-04.png" alt="rest 04" width="100%">
+</div>
+</div>
+<div class="paragraph">
+<p>Keep this browser window open while <code>sh scripts/generate-traffic.sh</code> continues to run in a terminal for the next section.</p>
+</div>
+<div class="paragraph">
+<p>Also set the replay to 1 minute and refresh every 10 seconds. This will give us a view of our Kiali traffic in slight-delayed "real-time".</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/canary-02.png" alt="canary 02" width="100%">
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_performing_a_canary_deployment_rest_api_with_mesh"><a class="anchor" href="#_performing_a_canary_deployment_rest_api_with_mesh"></a><a class="link" href="#_performing_a_canary_deployment_rest_api_with_mesh">3.3. Performing a Canary Deployment (<code>rest-api-with-mesh</code>)</a></h3>
+<div class="imageblock">
+<div class="content">
+<img src="_images/canary-01.png" alt="canary 01" width="70%">
+</div>
+</div>
+<div class="paragraph">
+<p>A canary deployment is a strategy where a team releases a new version of their application to a small percentage of the production traffic. This small percentage can test the new version and provide feedback. If the new version is working well, the team can increase the percentage, until all the traffic is using the new version.</p>
+</div>
+<div class="paragraph">
+<p>For this solution pattern, we will be using a script to automate the canary deployment. Other DevOps tools, such as Argo Rollouts and Ansible are commonly used to automate canary deployments with Service Mesh as well.</p>
+</div>
+<div class="paragraph">
+<p>In OpenShift Service Mesh, a canary deployment can be implemented using the <code>VirtualService</code> resource. A <code>VirtualService</code> allows you to define traffic routing rules for your services, enabling granular control over how requests are distributed between different versions of an application.</p>
+</div>
+<div class="paragraph">
+<p>Here’s how a canary deployment works with a <code>VirtualService</code> in OpenShift Service Mesh:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Deploy Multiple Versions of Your Application</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Ensure the new version of your application is deployed alongside the current version.</p>
+</li>
+<li>
+<p>For example, deploy <code>service-b-v1</code> and <code>service-b-v2</code> as separate deployments in OpenShift.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Define a <code>VirtualService</code></p>
+<div class="ulist">
+<ul>
+<li>
+<p>A VirtualService is created to control how traffic is routed between <code>v1</code> and <code>v2</code> of the <code>service-b`</code> service. The traffic split is defined using weights for each version.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Here’s an example of a <code>VirtualService</code> that implements a canary deployment for the <code>service-b`</code> service:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: service-b
+  namespace: rest-api-with-mesh
+spec:
+  hosts:
+  - service-b
+  http:
+  - route:
+    - destination:
+        host: service-b
+        port:
+          number: 8080
+        subset: v1
+      weight: 100
+    - destination:
+        host: service-b
+        port:
+          number: 8080
+        subset: v2
+      weight: 0</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In it&#8217;s current state, the <code>VirtualService</code> is has a weight of <code>100%</code> routing traffic to <code>v1</code> and <code>0%</code> to <code>v2</code>. We will use our deployment script to change these weights in small increments until traffic is weighted at <code>100%</code> to <code>v2</code></p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s kick this off now!</p>
+</div>
+<div class="paragraph">
+<p>Open a second terminal and open it side-by-side with your terminal running the <code>generate-traffic.sh</code> script. Also be sure that you can view your web console (either on the same or second screen).</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/canary-03.png" alt="canary 03" width="100%">
+</div>
+</div>
+<div class="paragraph">
+<p>(Above: Example screen layout)</p>
+</div>
+<div class="paragraph">
+<p>In the second terminal, run the script <code>canary-rollout.sh</code></p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell script hljs" data-lang="shell script">sh scripts/canary-rollout.sh</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this terminal you will see updated ttraffic weights between <code>v1</code> and <code>v2</code>, while in real time, output from the <code>traffic-generator.sh</code> script will start displaying responses from <code>service-b-v2</code>.</p>
+</div>
+<div class="paragraph">
+<p>The Kialy terminal will show updated progress as well, but keep in mind the data seen is 1 minute in the past, but still makes for a useful visualization.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/canary-04.png" alt="canary 04" width="100%">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/canary-05.png" alt="canary 05" width="100%">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/canary-06.png" alt="canary 06" width="100%">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/canary-07.png" alt="canary 07" width="100%">
+</div>
+</div>
+<div class="paragraph">
+<p>If you would like to roll traffic back to <code>v1</code>, run the command:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell script hljs" data-lang="shell script">oc apply -k ./resources/application/kustomize/overlays/pod</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_summary"><a class="anchor" href="#_summary"></a><a class="link" href="#_summary">4. Summary</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This solution pattern demonstrates a comprehensive approach to implementing OpenShift Service Mesh with practical use cases such as <code>bookinfo</code> and <code>rest-api-with-mesh</code>. Key takeaways include:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Properly setting up prerequisites and deploying OpenShift Service Mesh Operators and Gateway API.</p>
+</li>
+<li>
+<p>Leveraging Istio’s capabilities to manage traffic routing, observability, and distributed tracing.</p>
+</li>
+<li>
+<p>Using <code>TempoStack</code> for distributed tracing with integrations like OpenTelemetry.</p>
+</li>
+<li>
+<p>Deploying and exploring example applications (<code>bookinfo</code> and <code>rest-api-with-mesh</code>) to demonstrate Service Mesh features.</p>
+</li>
+<li>
+<p>Performing advanced deployment strategies, such as canary deployments, to manage application releases efficiently.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>By following this guide, users can gain hands-on experience with OpenShift Service Mesh and its components, enabling better understanding and adoption of these technologies in real-world scenarios.</p>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="02-architecture.html" class="query-params-link">2. Architecture</a></span>
+  <span class="next"><a href="developer-resources.html" class="query-params-link">4. Developer Resources</a></span>
+</nav>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <img
+          src="../_/img/app-services-logo.png" height="40px" alt="Cloud Native Architecture Solution Patterns"  href="https://redhat.com" ></a>
+</footer><script src="../_/js/vendor/clipboard.js"></script>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </body>
+</html>
