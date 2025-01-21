@@ -1,4 +1,4 @@
-= Solution Patterns: Solution Patterns - Optimizing Traffic and Observability with OpenShift Service Mesh 3
+= Solution Patterns: Optimizing Traffic and Observability with OpenShift Service Mesh 3
 :page-layout: home
 :sectnums:
 :sectlinks:
