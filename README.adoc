@@ -1,2 +1,2 @@
-This solution pattern demonstrates how OpenShift Service Mesh 3 (in Technology preview) empowers platform teams to manage traffic flows with precision, including showcasing a canary deployment for safe, incremental rollouts. Additionally, it highlights how observability insights help detect and resolve issues quickly, ensuring reliability and resiliency across hybrid cloud environments.
+This solution pattern demonstrates how OpenShift Service Mesh 3 empowers platform teams to manage traffic flows with precision, including showcasing a canary deployment for safe, incremental rollouts. Additionally, it highlights how observability insights help detect and resolve issues quickly, ensuring reliability and resiliency across hybrid cloud environments.
 

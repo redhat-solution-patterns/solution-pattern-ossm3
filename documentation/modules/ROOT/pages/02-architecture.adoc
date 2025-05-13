@@ -65,10 +65,10 @@ a|image::ossm-logo-04.png[width=100, height=100]
 * Red Hat supported products
 ** https://www.redhat.com/en/technologies/cloud-computing/openshift[Red Hat OpenShift]
 *** Red Hat OpenShift Container Platorm includes services to support Service Mesh
-**** https://www.redhat.com/en/blog/red-hat-openshift-service-mesh-3-now-technology-preview[OpenShift Service Mesh 3 (Tech Preivew)]
-**** https://docs.openshift.com/service-mesh/3.0.0tp1/observability/kiali/ossm-kiali-assembly.html[Kiali (provided by Red Hat)]
-**** https://docs.redhat.com/en/documentation/openshift_container_platform/4.17/html-single/red_hat_build_of_opentelemetry/index[Red Hat build of OpenTelemetry]
-**** https://docs.openshift.com/service-mesh/3.0.0tp1/observability/traces/ossm-distr-tracing-assembly.html[Tempo Operator (provided by Red Hat)]
+**** https://www.redhat.com/en/blog/introducing-red-hat-openshift-service-mesh-3[Introducing Red Hat OpenShift Service Mesh 3.0 ]
+**** https://docs.redhat.com/en/documentation/red_hat_openshift_service_mesh/3.0/html/about/ossm-understanding-service-mesh#ossm-about-concepts-kiali_ossm-about-concepts[Kiali (provided by Red Hat)]
+**** https://docs.redhat.com/en/documentation/openshift_container_platform/4.18/html-single/red_hat_build_of_opentelemetry/index[Red Hat build of OpenTelemetry]
+**** https://docs.redhat.com/en/documentation/openshift_container_platform/4.18/html/distributed_tracing/distributed-tracing-platform-tempo[Tempo Operator (provided by Red Hat)]
 **** https://www.redhat.com/en/technologies/cloud-computing/openshift/observability[OpenShift Observability]
 * Other open source products:
 ** https://min.io/[MinIO (for s3 storage)]

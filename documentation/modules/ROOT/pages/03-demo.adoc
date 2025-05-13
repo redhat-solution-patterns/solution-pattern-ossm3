@@ -29,11 +29,11 @@ oc version
 In this demo, the deployment scripts use the OpenShift CLI to:
 
 * Install the following OpenShift Operators:
-  ** OpenShift Service Mesh 3 (Tech Preview)
+  ** OpenShift Service Mesh 3 
   ** Kiali
   ** OpenTelemetry
   ** Tempo
-* Enable Gateway API (Tech Preview).
+* Enable Kubernetes Gateway API.
 * Implement an OpenShift Service Mesh solution:
   ** Provision and configure OpenShift Service Mesh control plane and other Istio supporting components (CRs and namespaces):
     *** Istio (istiod)
